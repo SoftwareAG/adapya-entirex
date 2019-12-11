@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>adapya.entirex.broker &mdash; adapya-entirex 1.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/SAG2015.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> adapya-entirex
+          
+
+          
+            
+            <img src="../../../_static/SAG2015.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">adapya-entirex</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>adapya.entirex.broker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for adapya.entirex.broker</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+<span class="c1"># -*- coding: latin1 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;broker.py is a Python interface to Webmethods EntireX Broker</span>
+
+<span class="sd">The module loads the EntireX Broker stub:</span>
+
+<span class="sd">* broker.dll for 64-bit Python otherwise broker32.dll (on Windows)</span>
+<span class="sd">* libbroker.so shared library (on Unix)</span>
+
+<span class="sd">broker.py defines the Broker class using the Advanced Communication</span>
+<span class="sd">interface (ACI) for communicating with the EntireX broker.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">acierror</span>
+<span class="c1"># from exceptions import Exception             # PY3</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="c1"># import string PY3</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">types</span>
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_char_p</span>
+
+<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="k">import</span> <span class="n">Abuf</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="k">import</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="k">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> <span class="n">Uint4</span><span class="p">,</span> \
+    <span class="n">T_IN</span><span class="p">,</span> <span class="n">T_OUT</span><span class="p">,</span> <span class="n">T_INOUT</span><span class="p">,</span> <span class="n">str_str</span>
+
+
+<div class="viewcode-block" id="BrokerException"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.BrokerException">[docs]</a><span class="k">class</span> <span class="nc">BrokerException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Instance will have set the following values:</span>
+
+<span class="sd">    self.value  is the EXX Broker response string</span>
+
+<span class="sd">    self.etb  is the Broker ACI call parameters that were used when</span>
+<span class="sd">                the error occurred</span>
+
+<span class="sd">    Example on how to call it::</span>
+
+<span class="sd">        try:</span>
+<span class="sd">            raise BrokerException(value,etb)</span>
+<span class="sd">        except BrokerException as e:</span>
+<span class="sd">            adalog.warning(&#39;BrokerException&#39;, e.value, e.__class__)</span>
+<span class="sd">            dump(e.etb.error_buffer,log=adalog.warning)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">etb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">):</span>   <span class="c1"># indicator no explanation in acierror.py</span>
+            <span class="n">value</span><span class="o">+=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Error-Text: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">etb</span><span class="o">.</span><span class="n">errtext_buffer</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">etb</span> <span class="o">=</span> <span class="n">etb</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BrokerError"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.BrokerError">[docs]</a><span class="k">class</span> <span class="nc">BrokerError</span><span class="p">(</span><span class="n">BrokerException</span><span class="p">):</span>
+    <span class="s2">&quot;Subclass of BrokerException for Broker Error Responses&quot;</span>
+    <span class="k">pass</span></div>
+<div class="viewcode-block" id="BrokerTimeOut"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.BrokerTimeOut">[docs]</a><span class="k">class</span> <span class="nc">BrokerTimeOut</span><span class="p">(</span><span class="n">BrokerException</span><span class="p">):</span>
+    <span class="s2">&quot;Subclass of BrokerException for timeouts of requests to Broker&quot;</span>
+    <span class="k">pass</span></div>
+<div class="viewcode-block" id="InterfaceError"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.InterfaceError">[docs]</a><span class="k">class</span> <span class="nc">InterfaceError</span><span class="p">(</span><span class="n">BrokerException</span><span class="p">):</span>
+    <span class="s2">&quot;Subclass of BrokerException for Broker Interface Errors&quot;</span>
+    <span class="k">pass</span></div>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">c_char_p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker</span>     <span class="c1"># 64 bit broker DLL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker32</span>   <span class="c1"># 32 bit broker DLL</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;zos&#39;</span><span class="p">:</span>
+    <span class="c1"># MVS load lib search order: STEPLIB, JOBLIB, LPA and Link List</span>
+    <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;//BROKER2&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;libbroker.so&#39;</span><span class="p">)</span>
+
+<span class="n">etblnk</span><span class="o">.</span><span class="n">broker</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">]</span>
+
+
+<span class="c1"># --- EntireX Broker API Type Constants (api_type) -----------------</span>
+
+<span class="n">API_TYPE1</span><span class="o">=</span>                      <span class="mi">1</span>
+
+<span class="c1"># --- EntireX Broker API Version Constants (api_version) -----------</span>
+
+<span class="n">API_VERS1</span><span class="o">=</span>                      <span class="mi">1</span>
+<span class="n">API_VERS2</span><span class="o">=</span>                      <span class="mi">2</span>
+<span class="n">API_VERS3</span><span class="o">=</span>                      <span class="mi">3</span>
+<span class="n">API_VERS4</span><span class="o">=</span>                      <span class="mi">4</span>
+<span class="n">API_VERS5</span><span class="o">=</span>                      <span class="mi">5</span>
+<span class="n">API_VERS6</span><span class="o">=</span>                      <span class="mi">6</span>
+<span class="n">API_VERS7</span><span class="o">=</span>                      <span class="mi">7</span>
+<span class="n">API_VERS8</span><span class="o">=</span>                      <span class="mi">8</span>
+<span class="n">API_VERS9</span><span class="o">=</span>                      <span class="mi">9</span>
+<span class="n">API_VERS10</span><span class="o">=</span>                    <span class="mi">10</span>
+<span class="n">API_VERS_HIGHEST</span><span class="o">=</span>              <span class="mi">10</span>   <span class="c1"># Broker V9.9 single conv. mode</span>
+
+
+<span class="c1"># --- EntireX Broker API API Function Constants (function) ---------</span>
+
+<span class="n">FCT_SEND</span> <span class="o">=</span>             <span class="mi">1</span>
+<span class="n">FCT_RECEIVE</span> <span class="o">=</span>          <span class="mi">2</span>
+<span class="n">FCT_UNDO</span> <span class="o">=</span>             <span class="mi">4</span>
+<span class="n">FCT_EOC</span> <span class="o">=</span>              <span class="mi">5</span>
+<span class="n">FCT_REGISTER</span> <span class="o">=</span>         <span class="mi">6</span>
+<span class="n">FCT_DEREGISTER</span> <span class="o">=</span>       <span class="mi">7</span>
+<span class="n">FCT_VERSION</span> <span class="o">=</span>          <span class="mi">8</span>
+<span class="n">FCT_LOGON</span> <span class="o">=</span>            <span class="mi">9</span>
+<span class="n">FCT_LOGOFF</span> <span class="o">=</span>          <span class="mi">10</span>
+<span class="n">FCT_SET</span> <span class="o">=</span>             <span class="mi">11</span>
+<span class="n">FCT_GET</span> <span class="o">=</span>             <span class="mi">12</span>
+<span class="n">FCT_SYNCPOINT</span> <span class="o">=</span>       <span class="mi">13</span>
+<span class="n">FCT_KERNELVERS</span> <span class="o">=</span>      <span class="mi">14</span>
+<span class="n">FCT_LOCTRANS</span> <span class="o">=</span>        <span class="mi">15</span>  <span class="c1"># deprecated</span>
+<span class="n">FCT_SETSSLPARMS</span> <span class="o">=</span>     <span class="mi">16</span>
+<span class="n">FCT_SENDPUBLICATION</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">FCT_RECVPUBLICATION</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">FCT_SUBSCRIBE</span> <span class="o">=</span>       <span class="mi">19</span>
+<span class="n">FCT_UNSUBSCRIBE</span> <span class="o">=</span>     <span class="mi">20</span>
+<span class="n">FCT_CNTLPUBLICATION</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="n">FCT_REPYERROR</span> <span class="o">=</span>       <span class="mi">22</span>
+
+<span class="n">function_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;SEND&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;RECEIVE&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;UNDO&#39;</span><span class="p">,</span>
+                <span class="mi">5</span><span class="p">:</span><span class="s1">&#39;EOC&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="s1">&#39;REGISTER&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="s1">&#39;DEREGISTER&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;VERSION&#39;</span><span class="p">,</span>
+                <span class="mi">9</span><span class="p">:</span><span class="s1">&#39;LOGON&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="s1">&#39;LOGOFF&#39;</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span><span class="s1">&#39;SET&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+                <span class="mi">13</span><span class="p">:</span><span class="s1">&#39;SYNCPOINT&#39;</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span><span class="s1">&#39;KERNELVERS&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span><span class="s1">&#39;LOCTRANS&#39;</span><span class="p">,</span>
+                <span class="mi">16</span><span class="p">:</span><span class="s1">&#39;SETSSLPARMS&#39;</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="s1">&#39;SENDPUBLICATION&#39;</span><span class="p">,</span>
+                <span class="mi">18</span><span class="p">:</span><span class="s1">&#39;RECVPUBLICATION&#39;</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span><span class="s1">&#39;SUBSCRIBE&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="s1">&#39;UNSUBSCRIBE&#39;</span><span class="p">,</span>
+                <span class="mi">21</span><span class="p">:</span><span class="s1">&#39;CNTLPUBLICATION&#39;</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span><span class="s1">&#39;REPLYERROR&#39;</span><span class="p">}</span> <span class="p">)</span>
+
+<span class="c1"># --- EntireX Broker API Option Constants (option) -----------------</span>
+
+<span class="n">OPT_MSG</span> <span class="o">=</span>           <span class="mh">0x01</span>
+<span class="n">OPT_HOLD</span> <span class="o">=</span>          <span class="mh">0x02</span>
+<span class="n">OPT_IMMED</span> <span class="o">=</span>         <span class="mh">0x03</span>
+<span class="n">OPT_QUIESCE</span> <span class="o">=</span>       <span class="mh">0x04</span>
+<span class="n">OPT_EOC</span> <span class="o">=</span>           <span class="mh">0x05</span>
+<span class="n">OPT_CANCEL</span> <span class="o">=</span>        <span class="mh">0x06</span>
+<span class="n">OPT_LAST</span> <span class="o">=</span>          <span class="mh">0x07</span>
+<span class="n">OPT_NEXT</span> <span class="o">=</span>          <span class="mh">0x08</span>
+<span class="n">OPT_PREVIEW</span> <span class="o">=</span>       <span class="mh">0x09</span>
+<span class="n">OPT_COMMIT</span> <span class="o">=</span>        <span class="mh">0x0a</span>
+<span class="n">OPT_BACKOUT</span> <span class="o">=</span>       <span class="mh">0x0b</span>
+<span class="n">OPT_SYNC</span> <span class="o">=</span>          <span class="mh">0x0c</span>
+<span class="n">OPT_ATTACH</span> <span class="o">=</span>        <span class="mh">0x0d</span>
+<span class="n">OPT_DELETE</span> <span class="o">=</span>        <span class="mh">0x0e</span>
+<span class="n">OPT_EOCCANCEL</span> <span class="o">=</span>     <span class="mh">0x0f</span>
+<span class="n">OPT_QUERY</span> <span class="o">=</span>         <span class="mh">0x10</span>
+<span class="n">OPT_SETUSTATUS</span> <span class="o">=</span>    <span class="mh">0x11</span>
+<span class="n">OPT_ANY</span> <span class="o">=</span>           <span class="mh">0x12</span>
+<span class="n">OPT_TERMINATE</span> <span class="o">=</span>     <span class="mh">0x13</span>
+<span class="n">OPT_DURABLE</span> <span class="o">=</span>       <span class="mh">0x14</span>
+<span class="n">OPT_CHECKSERVICE</span> <span class="o">=</span>  <span class="mh">0x15</span>
+<span class="n">OPT_EXTENDED</span> <span class="o">=</span>      <span class="mh">0x16</span>
+
+<span class="n">option_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;MSG&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;HOLD&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;IMMED&#39;</span><span class="p">,</span>
+        <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;QUIESCE&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="s1">&#39;EOC&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="s1">&#39;CANCEL&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="s1">&#39;LAST&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;NEXT&#39;</span><span class="p">,</span>
+        <span class="mi">9</span><span class="p">:</span><span class="s1">&#39;PREVIEW&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span><span class="s1">&#39;BACKOUT&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="s1">&#39;SYNC&#39;</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span><span class="s1">&#39;ATTACH&#39;</span><span class="p">,</span>
+        <span class="mi">14</span><span class="p">:</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span><span class="s1">&#39;EOCCANCEL&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="s1">&#39;QUERY&#39;</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="s1">&#39;SETUSTATUS&#39;</span><span class="p">,</span>
+        <span class="mi">18</span><span class="p">:</span><span class="s1">&#39;ANY&#39;</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span><span class="s1">&#39;TERMINATE&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="s1">&#39;DURABLE&#39;</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span><span class="s1">&#39;CHECKSERVICE&#39;</span><span class="p">,</span>
+        <span class="mi">22</span><span class="p">:</span><span class="s1">&#39;EXTENDED&#39;</span><span class="p">,})</span>
+
+<span class="c1"># --- EntireX Broker Conversation Status Constants (conv_stat) -----</span>
+
+<span class="n">CONVSTAT_NEW</span>  <span class="o">=</span> <span class="mi">1</span>
+<span class="n">CONVSTAT_OLD</span>  <span class="o">=</span> <span class="mi">2</span>
+<span class="n">CONVSTAT_NONE</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">convstat_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;NEW&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;OLD&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s1">&#39;None&#39;</span><span class="p">})</span>
+
+<span class="c1"># --- EntireX Broker Store Constants (store) -----------------------</span>
+
+<span class="n">STORE_OFF</span><span class="o">=</span>                      <span class="s1">&#39;</span><span class="se">\x01</span><span class="s1">&#39;</span>
+<span class="n">STORE_BROKER</span><span class="o">=</span>                   <span class="s1">&#39;</span><span class="se">\x02</span><span class="s1">&#39;</span>
+
+<span class="c1"># --- EntireX Broker Status Constants (status) ---------------------</span>
+
+<span class="n">STAT_OFF</span><span class="o">=</span>                       <span class="s1">&#39;</span><span class="se">\x01</span><span class="s1">&#39;</span>
+<span class="n">STAT_STORED</span><span class="o">=</span>                    <span class="s1">&#39;</span><span class="se">\x02</span><span class="s1">&#39;</span>
+<span class="n">STAT_DELIVERY_ATTEMP</span><span class="o">=</span>           <span class="s1">&#39;</span><span class="se">\x03</span><span class="s1">&#39;</span>
+<span class="n">STAT_DELIVERED</span><span class="o">=</span>                 <span class="s1">&#39;</span><span class="se">\x04</span><span class="s1">&#39;</span>
+<span class="n">STAT_PROCESSED</span><span class="o">=</span>                 <span class="s1">&#39;</span><span class="se">\x05</span><span class="s1">&#39;</span>
+<span class="n">STAT_DEAD</span><span class="o">=</span>                      <span class="s1">&#39;</span><span class="se">\x06</span><span class="s1">&#39;</span>
+
+<span class="n">texts_STAT</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;n/a&#39;</span><span class="p">,</span><span class="s1">&#39;OFF&#39;</span><span class="p">,</span><span class="s1">&#39;STORED&#39;</span><span class="p">,</span><span class="s1">&#39;DELIVERY_ATTEMP&#39;</span><span class="p">,</span><span class="s1">&#39;DELIVERED&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;PROCESSED&#39;</span><span class="p">,</span><span class="s1">&#39;DEAD&#39;</span><span class="p">)</span>
+
+<span class="c1"># --- EntireX Broker UOW Status Constants (uowStatus) --------------</span>
+
+<span class="n">RECV_NONE</span> <span class="o">=</span>    <span class="mi">0</span>
+<span class="n">RECEIVED</span> <span class="o">=</span>     <span class="mi">1</span>
+<span class="n">ACCEPTED</span> <span class="o">=</span>     <span class="mi">2</span>
+<span class="n">DELIVERED</span> <span class="o">=</span>    <span class="mi">3</span>
+<span class="n">BACKEDOUT</span> <span class="o">=</span>    <span class="mi">4</span>
+<span class="n">PROCESSED</span> <span class="o">=</span>    <span class="mi">5</span>
+<span class="n">CANCELLED</span> <span class="o">=</span>    <span class="mi">6</span>
+<span class="n">TIMEOUT</span> <span class="o">=</span>      <span class="mi">7</span>
+<span class="n">DISCARDED</span> <span class="o">=</span>    <span class="mi">8</span>
+<span class="n">RECV_FIRST</span> <span class="o">=</span>   <span class="mi">9</span>
+<span class="n">RECV_MIDDLE</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">RECV_LAST</span> <span class="o">=</span>   <span class="mi">11</span>
+<span class="n">RECV_ONLY</span> <span class="o">=</span>   <span class="mi">12</span>
+
+<span class="n">uowStatus_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;RECV_NONE&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;RECEIVED&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;ACCEPTED&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">:</span><span class="s1">&#39;DELIVERED&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s1">&#39;BACKEDOUT&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s1">&#39;PROCESSED&#39;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span><span class="s1">&#39;CANCELLED&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s1">&#39;TIMEOUT&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s1">&#39;DISCARDED&#39;</span><span class="p">,</span><span class="mi">9</span><span class="p">:</span><span class="s1">&#39;RECV_FIRST&#39;</span><span class="p">,</span>
+    <span class="mi">10</span><span class="p">:</span><span class="s1">&#39;RECV_MIDDLE&#39;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s1">&#39;RECV_LAST&#39;</span><span class="p">,</span><span class="mi">12</span><span class="p">:</span><span class="s1">&#39;RECV_ONLY&#39;</span><span class="p">})</span>
+
+<span class="c1"># --- EntireX Broker UOW Status Persist (uowStatusPersist) ---------</span>
+
+<span class="n">UWSTATP_DEFAULT</span><span class="o">=</span>                <span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span>   <span class="c1"># use default from Broker</span>
+<span class="n">UWSTATP_NO</span><span class="o">=</span>                     <span class="s1">&#39;</span><span class="se">\xff</span><span class="s1">&#39;</span>   <span class="c1"># status is not persistent</span>
+
+
+<span class="c1"># --- EntireX Broker Architecture Constants (data_arch) ------------</span>
+
+<span class="n">ACODE_HIGH_ASCII_IBM</span><span class="o">=</span>           <span class="s1">&#39;</span><span class="se">\x01</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__ASCII_IBM</span><span class="o">=</span>           <span class="s1">&#39;</span><span class="se">\x02</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGH_EBCDIC_IBM</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x03</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__EBCDIC_IBM</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x04</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGH_ASCII_VAX</span><span class="o">=</span>           <span class="s1">&#39;</span><span class="se">\x05</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__ASCII_VAX</span><span class="o">=</span>           <span class="s1">&#39;</span><span class="se">\x06</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGH_EBCDIC_VAX</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x07</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__EBCDIC_VAX</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x08</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGH_ASCII_IEEE</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x09</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__ASCII_IEEE</span><span class="o">=</span>          <span class="s1">&#39;</span><span class="se">\x0a</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGH_EBCDIC_IEEE</span><span class="o">=</span>         <span class="s1">&#39;</span><span class="se">\x0b</span><span class="s1">&#39;</span>
+<span class="n">ACODE_LOW__EBCDIC_IEEE</span><span class="o">=</span>         <span class="s1">&#39;</span><span class="se">\x0c</span><span class="s1">&#39;</span>
+<span class="n">ACODE_HIGHEST_VALUE</span><span class="o">=</span>            <span class="s1">&#39;</span><span class="se">\x0d</span><span class="s1">&#39;</span>
+
+<span class="c1"># --- EntireX Broker Force Logon Constants (forceLogon) ------------</span>
+
+<span class="n">FORCE_LOGON_NO</span><span class="o">=</span>                 <span class="s1">&#39;N&#39;</span>
+<span class="n">FORCE_LOGON_YES</span><span class="o">=</span>                <span class="s1">&#39;Y&#39;</span>
+<span class="n">FORCE_LOGON_S</span><span class="o">=</span>                  <span class="s1">&#39;S&#39;</span>
+
+<span class="c1"># --- EntireX Broker Encryption Level Constants (encryptionLevel) --</span>
+
+<span class="n">ENCLEVEL_NONE</span><span class="o">=</span>                  <span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span>
+<span class="n">ENCLEVEL_TO_BROKER</span><span class="o">=</span>             <span class="s1">&#39;</span><span class="se">\x01</span><span class="s1">&#39;</span>
+<span class="n">ENCLEVEL_TO_TARGET</span><span class="o">=</span>             <span class="s1">&#39;</span><span class="se">\x02</span><span class="s1">&#39;</span>
+
+<span class="c1"># --- EntireX Broker Kernel Security Constants (kernelSecurity) ----</span>
+
+<span class="n">KERNEL_SECURITY_NO</span><span class="o">=</span>             <span class="s1">&#39;N&#39;</span>
+<span class="n">KERNEL_SECURITY_YES</span><span class="o">=</span>            <span class="s1">&#39;Y&#39;</span>
+<span class="n">KERNEL_SECURITY_USER</span><span class="o">=</span>           <span class="s1">&#39;U&#39;</span>
+<span class="n">KERNEL_SECURITY_LIGHT</span><span class="o">=</span>          <span class="s1">&#39;L&#39;</span>
+
+<span class="c1"># --- EntireX Broker Compression Level Constants (compress) --------</span>
+
+<span class="n">COMPRESS_LEVEL_0</span><span class="o">=</span>               <span class="s1">&#39;0&#39;</span>
+<span class="n">COMPRESS_LEVEL_1</span><span class="o">=</span>               <span class="s1">&#39;1&#39;</span>
+<span class="n">COMPRESS_LEVEL_2</span><span class="o">=</span>               <span class="s1">&#39;2&#39;</span>
+<span class="n">COMPRESS_LEVEL_3</span><span class="o">=</span>               <span class="s1">&#39;3&#39;</span>
+<span class="n">COMPRESS_LEVEL_4</span><span class="o">=</span>               <span class="s1">&#39;4&#39;</span>
+<span class="n">COMPRESS_LEVEL_5</span><span class="o">=</span>               <span class="s1">&#39;5&#39;</span>
+<span class="n">COMPRESS_LEVEL_6</span><span class="o">=</span>               <span class="s1">&#39;6&#39;</span>
+<span class="n">COMPRESS_LEVEL_7</span><span class="o">=</span>               <span class="s1">&#39;7&#39;</span>
+<span class="n">COMPRESS_LEVEL_8</span><span class="o">=</span>               <span class="s1">&#39;8&#39;</span>
+<span class="n">COMPRESS_LEVEL_9</span><span class="o">=</span>               <span class="s1">&#39;9&#39;</span>
+<span class="n">COMPRESS_LEVEL_NO</span><span class="o">=</span>              <span class="s1">&#39;N&#39;</span>
+<span class="n">COMPRESS_LEVEL_YES</span><span class="o">=</span>             <span class="s1">&#39;Y&#39;</span>
+
+<span class="c1"># --- EntireX Broker API Size of fields ----------------------------</span>
+
+<span class="n">S_ADAPTERR</span><span class="o">=</span>                     <span class="mi">8</span>
+<span class="n">S_APPLICATION_NAME</span><span class="o">=</span>             <span class="mi">64</span>
+<span class="n">S_APPLICATION_TYPE</span><span class="o">=</span>             <span class="mi">8</span>
+<span class="n">S_BROKER_ID</span><span class="o">=</span>                    <span class="mi">32</span>
+<span class="n">S_CLIENTUID</span><span class="o">=</span>                    <span class="mi">32</span>
+<span class="n">S_COMMIT_TIME</span><span class="o">=</span>                  <span class="mi">17</span>
+<span class="n">S_CONV_ID</span><span class="o">=</span>                      <span class="mi">16</span>
+<span class="n">S_ENVIRONMENT</span><span class="o">=</span>                  <span class="mi">32</span>
+<span class="n">S_ERROR_CODE</span><span class="o">=</span>                   <span class="mi">8</span>
+<span class="n">S_ERROR_CLASS</span><span class="o">=</span>                  <span class="mi">4</span>
+<span class="n">S_ERROR_NUMBER</span><span class="o">=</span>                 <span class="mi">4</span>
+<span class="n">S_LOCALE</span><span class="o">=</span>                       <span class="mi">40</span>
+<span class="n">S_MSGID</span><span class="o">=</span>                        <span class="mi">32</span>
+<span class="n">S_MSGTYPE</span><span class="o">=</span>                      <span class="mi">16</span>
+<span class="n">S_PASSWORD</span><span class="o">=</span>                     <span class="mi">32</span>
+<span class="n">S_PLATFORM</span><span class="o">=</span>                     <span class="mi">8</span>
+<span class="n">S_PRODUCT_VERSION</span><span class="o">=</span>              <span class="mi">16</span>
+<span class="n">S_PTIME</span><span class="o">=</span>                        <span class="mi">8</span>
+<span class="n">S_PUBLICATION_ID</span><span class="o">=</span>               <span class="mi">16</span>
+<span class="n">S_PUID</span><span class="o">=</span>                         <span class="mi">28</span>
+<span class="n">S_SECURITY_TOKEN</span><span class="o">=</span>               <span class="mi">32</span>
+<span class="n">S_SERVER_CLASS</span><span class="o">=</span>                 <span class="mi">32</span>
+<span class="n">S_SERVER_NAME</span><span class="o">=</span>                  <span class="mi">32</span>
+<span class="n">S_SERVICE</span><span class="o">=</span>                      <span class="mi">32</span>
+<span class="n">S_T_NAME</span><span class="o">=</span>                       <span class="mi">8</span>
+<span class="n">S_TOKEN</span><span class="o">=</span>                        <span class="mi">32</span>
+<span class="n">S_TOPIC</span><span class="o">=</span>                        <span class="mi">96</span>
+<span class="n">S_TXT</span><span class="o">=</span>                          <span class="mi">40</span>
+<span class="n">S_U_STATUS</span><span class="o">=</span>                     <span class="mi">32</span>
+<span class="n">S_UOW_ID</span><span class="o">=</span>                       <span class="mi">16</span>
+<span class="n">S_USER_ID</span><span class="o">=</span>                      <span class="mi">32</span>
+<span class="n">S_USRDATA</span><span class="o">=</span>                      <span class="mi">16</span>
+<span class="n">S_VERS</span><span class="o">=</span>                         <span class="mi">8</span>
+<span class="n">S_WAIT</span><span class="o">=</span>                         <span class="mi">8</span>
+<span class="n">S_BROKER_URL</span><span class="o">=</span>                   <span class="mi">512</span>
+
+<span class="n">ETB_CODEPAGE_USE_PLATFORM_DEFAULT</span><span class="o">=</span>  <span class="s2">&quot;LOCAL&quot;</span>
+
+<span class="c1"># EntireX Broker control block</span>
+<span class="n">etbcbfields</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;api_type&#39;</span><span class="p">,</span>       <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;api_version&#39;</span><span class="p">,</span>    <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span>       <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;option&#39;</span><span class="p">,</span>         <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved1&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;send_length&#39;</span><span class="p">,</span>    <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;receive_length&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>  <span class="c1"># maximum receive length</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;return_length&#39;</span><span class="p">,</span>  <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span> <span class="c1"># length of returned data</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;errtext_length&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>  <span class="c1"># error text buffer len</span>
+
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;broker_id&#39;</span><span class="p">,</span>      <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+
+    <span class="c1"># service name</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server_class&#39;</span><span class="p">,</span>   <span class="mi">32</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server_name&#39;</span><span class="p">,</span>    <span class="mi">32</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;service&#39;</span><span class="p">,</span>        <span class="mi">32</span><span class="p">),</span>
+
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;user_id&#39;</span><span class="p">,</span>        <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span>       <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1"># may contain binary data</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;token&#39;</span><span class="p">,</span>          <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;security_token&#39;</span><span class="p">,</span>  <span class="mi">32</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;conv_id&#39;</span><span class="p">,</span>        <span class="mi">16</span><span class="p">),</span>              <span class="c1">#0x124 conversational/non.</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;wait&#39;</span><span class="p">,</span>           <span class="mi">8</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>     <span class="c1">#blocked/non-blocked, time in sec</span>
+
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;error_code&#39;</span><span class="p">,</span>      <span class="mi">8</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;environment&#39;</span><span class="p">,</span>    <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1">#translation parm</span>
+
+    <span class="c1"># V2 following</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;adcount&#39;</span><span class="p">,</span>             <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>   <span class="c1"># attempted deliv. count</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;user_data&#39;</span><span class="p">,</span>       <span class="mi">16</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;msg_id&#39;</span><span class="p">,</span>          <span class="mi">32</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;msg_type&#39;</span><span class="p">,</span>       <span class="mi">16</span><span class="p">),</span>
+
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;ptime&#39;</span><span class="p">,</span>           <span class="mi">8</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1"># future use</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;newpassword&#39;</span><span class="p">,</span>     <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;adapt_err&#39;</span><span class="p">,</span>       <span class="mi">8</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;client_uid&#39;</span><span class="p">,</span>     <span class="mi">32</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;conv_stat&#39;</span><span class="p">,</span>           <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span>  <span class="mi">1</span><span class="p">),</span>                        <span class="c1"># UOW is persistent</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">,</span>  <span class="mi">1</span><span class="p">),</span>                       <span class="c1"># future use</span>
+
+    <span class="c1"># V3 following</span>
+    <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;uowStatus&#39;</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uowTime&#39;</span><span class="p">,</span>         <span class="mi">8</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>     <span class="c1"># lifetime of UOW (sec)</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uowID&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;userStatus&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;uowStatusPersist&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1"># persist flag</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved2&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+
+    <span class="c1"># V4 following</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;locale_string&#39;</span><span class="p">,</span>  <span class="mi">40</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1"># callers set_locale</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;data_arch&#39;</span><span class="p">,</span>        <span class="mi">1</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>    <span class="c1"># architecture</span>
+
+    <span class="c1"># V6 following</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;forceLogon&#39;</span><span class="p">,</span>      <span class="mi">1</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;encryptionLevel&#39;</span><span class="p">,</span>  <span class="mi">1</span><span class="p">),</span>
+
+    <span class="c1"># V7 following</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;kernelsecurity&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;commitTime&#39;</span><span class="p">,</span>     <span class="mi">17</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;compress&#39;</span><span class="p">,</span>        <span class="mi">1</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span>
+    <span class="c1"># Filler(&#39;reserved3&#39;, 114),                # size=744 ACI V6/V7</span>
+
+    <span class="c1"># V8 following (=Broker V7.2)</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved4&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>                    <span class="c1"># align</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uowStatusTime&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>                <span class="c1"># UOW status life time</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">),</span>                       <span class="c1">#</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;publicationID&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>               <span class="c1"># size = 756 ACI V8</span>
+
+    <span class="c1"># V9 following (=Broker V8.1)</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved5&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>                   <span class="c1"># was bid (partner broker id)</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved6&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>                   <span class="c1"># align</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;clientId&#39;</span><span class="p">,</span>  <span class="n">opt</span><span class="o">=</span><span class="n">T_OUT</span><span class="p">),</span>             <span class="c1"># unique client id set on RECV/SEND w. WAIT</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved7&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>                   <span class="c1"># align</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;logCommand&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>                   <span class="c1">#</span>
+    <span class="n">String</span><span class="p">(</span><span class="s1">&#39;credentialsType&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>              <span class="c1"># default: userid/passw, &#39;1&#39;=IAF auth.</span>
+    <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved8&#39;</span><span class="p">,</span> <span class="mi">34</span><span class="p">),</span>                   <span class="c1"># size=872 V9</span>
+
+    <span class="c1"># V10 following (=Broker V9.7)</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;varlist_offset&#39;</span><span class="p">),</span>                   <span class="c1">#</span>
+    <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;long_broker_id_length&#39;</span><span class="p">),</span>            <span class="c1"># size = 880 / 0x350 LETBCB10</span>
+    <span class="p">)</span>
+
+<span class="n">LETBCB9</span> <span class="o">=</span>  <span class="mi">872</span>
+<span class="n">LETBCB10</span> <span class="o">=</span> <span class="mi">880</span>
+
+
+<span class="k">def</span> <span class="nf">pptime</span><span class="p">(</span><span class="n">timestring</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">timestring</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="n">timestring</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span> <span class="p">:</span> <span class="c1"># string not blank or zero</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%04s</span><span class="s2">-</span><span class="si">%02s</span><span class="s2">-</span><span class="si">%02s</span><span class="s2"> </span><span class="si">%02s</span><span class="s2">:</span><span class="si">%02s</span><span class="s2">:</span><span class="si">%02s</span><span class="s2">.</span><span class="si">%03s</span><span class="s2"> UTC+0&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">timestring</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">timestring</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">timestring</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">timestring</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span><span class="n">timestring</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">],</span><span class="n">timestring</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="mi">14</span><span class="p">],</span> <span class="n">timestring</span><span class="p">[</span><span class="mi">14</span><span class="p">:])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+<div class="viewcode-block" id="Etbcb"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Etbcb">[docs]</a><span class="k">class</span> <span class="nc">Etbcb</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
+    <span class="s2">&quot;Defines Broker control block with its attributes and Broker call()&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">receive_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">use_api_version</span><span class="o">=</span><span class="n">API_VERS7</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;errtext_buffer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Abuf</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;send_buffer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;receive_buffer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;trace&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;use_api_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_api_version</span>
+
+        <span class="n">Datamap</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Etbcb&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">etbcbfields</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errtext_length</span><span class="o">=</span><span class="mi">80</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_type</span><span class="o">=</span><span class="n">API_TYPE1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span><span class="o">=</span><span class="n">use_api_version</span>
+
+        <span class="k">if</span> <span class="n">receive_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">receive_buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="n">receive_length</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">receive_length</span><span class="o">=</span><span class="n">receive_length</span>
+        <span class="k">if</span> <span class="n">send_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="n">send_length</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_length</span><span class="o">=</span><span class="n">send_length</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Before Broker call&#39;</span><span class="p">)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;ETBCB&#39;</span><span class="p">)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">receive_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Receive Buffer&#39;</span><span class="p">)</span>
+            <span class="c1"># print(repr(self.send_buffer), len(self.send_buffer), self.send_length)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Send Buffer&#39;</span><span class="p">)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errtext_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Error Text Buffer&#39;</span><span class="p">)</span>
+            <span class="c1"># self.error_code=&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">&amp;</span><span class="mi">4</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s1"> == EXX </span><span class="si">%s%s%s%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
+                <span class="n">function_str</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">),</span>
+                <span class="s1">&#39; option=&#39;</span><span class="o">+</span><span class="n">option_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39; wait=&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1"> &#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">==</span><span class="n">FCT_RECEIVE</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="o">*</span><span class="s1">&#39; &#39;</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39; user=</span><span class="si">%s</span><span class="s1"> token=</span><span class="si">%s</span><span class="s1"> Service=</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">server_name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">==</span><span class="n">FCT_LOGON</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                <span class="p">))</span>
+            <span class="k">if</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># self.function==FCT_SEND:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_length</span><span class="p">)</span>
+                <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">send_length</span><span class="p">],</span>
+                    <span class="n">header</span><span class="o">=</span><span class="s1">&#39;    send_buffer&#39;</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="n">etblnk</span><span class="o">.</span><span class="n">broker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_buffer</span><span class="p">,</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">errtext_buffer</span> <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">&amp;</span><span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;After Broker call&#39;</span><span class="p">)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;ETBCB&#39;</span><span class="p">)</span>
+            <span class="c1"># dump(self.receive_buffer, header=&#39;Receive Buffer&#39;)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_length</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">receive_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">return_length</span><span class="p">],</span>
+                    <span class="n">header</span><span class="o">=</span><span class="s1">&#39;    receive_buffer&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;   &#39;</span><span class="p">)</span>
+            <span class="c1"># print(repr(self.send_buffer), len(self.send_buffer), self.send_length)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Send Buffer&#39;</span><span class="p">)</span>
+            <span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errtext_buffer</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="s1">&#39;Error Text Buffer&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">&amp;</span><span class="mi">4</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    conv_id=</span><span class="si">%-16s</span><span class="s1">  conv_stat=</span><span class="si">%s</span><span class="s1">  return_length=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1"> &#39;</span><span class="p">),</span>
+                <span class="n">convstat_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv_stat</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">return_length</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      uowID=</span><span class="si">%-16s</span><span class="s1">  uowStatus=</span><span class="si">%-9s</span><span class="s1">  commitTime=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1"> &#39;</span><span class="p">),</span>
+                <span class="n">uowStatus_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="p">),</span>
+                <span class="n">pptime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commitTime</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_code</span> <span class="o">&gt;</span> <span class="s1">&#39;00000000&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_code</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s1">&#39;00740074&#39;</span><span class="p">,</span>   <span class="c1"># Wait timeout</span>
+                    <span class="s1">&#39;02150373&#39;</span><span class="p">):</span>  <span class="c1"># Transport timeout (new with single conv?)</span>
+                <span class="k">raise</span> <span class="n">BrokerTimeOut</span><span class="p">(</span> <span class="n">acierror</span><span class="o">.</span><span class="n">geterror</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_code</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">BrokerError</span><span class="p">(</span><span class="n">acierror</span><span class="o">.</span><span class="n">geterror</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">error_code</span><span class="p">),</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InterfaceError</span><span class="p">(</span><span class="n">acierror</span><span class="o">.</span><span class="n">geterror</span><span class="p">(</span><span class="s1">&#39;0020</span><span class="si">%04d</span><span class="s1">&#39;</span> <span class="o">%</span><span class="n">i</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Broker"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker">[docs]</a><span class="k">class</span> <span class="nc">Broker</span><span class="p">(</span><span class="n">Etbcb</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines the essential Broker ACI functions using the Etbcb.</span>
+<span class="sd">       For reference see EntireX Broker ACI Programming.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;monty&#39;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">receive_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">):</span>
+        <span class="n">Etbcb</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">receive_length</span><span class="o">=</span><span class="n">receive_length</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="n">send_length</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">broker_id</span><span class="o">=</span><span class="n">broker_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="o">=</span><span class="n">token</span>
+
+<div class="viewcode-block" id="Broker.backout"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.backout">[docs]</a>    <span class="k">def</span> <span class="nf">backout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Backout UOW but continue conversation&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_SYNCPOINT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_BACKOUT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>   <span class="c1"># reset some fields after commit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span></div>
+
+<div class="viewcode-block" id="Broker.commit"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Commit UOW but continue conversation&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_SYNCPOINT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_COMMIT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>   <span class="c1"># reset some fields after commit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span></div>
+
+<div class="viewcode-block" id="Broker.commitEndConversation"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.commitEndConversation">[docs]</a>    <span class="k">def</span> <span class="nf">commitEndConversation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Commit UOW and end conversation&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_SYNCPOINT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_EOC</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span>           <span class="c1"># reset some fields after commit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span></div>
+
+<div class="viewcode-block" id="Broker.kernelVersion"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.kernelVersion">[docs]</a>    <span class="k">def</span> <span class="nf">kernelVersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Determine Broker kernel version&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_KERNELVERS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="o">=</span> <span class="n">OPT_EXTENDED</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">MAX-MSG is </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_length</span><span class="p">)</span>
+        <span class="c1"># maxmsg is returned with the OPT_EXTENDED option</span>
+        <span class="c1"># obviously works with use_api_version V4</span>
+        <span class="c1"># unrelated to single conversation mode</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_api_version</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_api_version</span>
+
+        <span class="c1"># return self.errtext_buffer[:].strip(b&#39;\x00 &#39;) # remove blanks and x00</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">errtext_buffer</span><span class="o">.</span><span class="n">buf2str</span><span class="p">()</span> <span class="c1"># remove blanks and x00</span></div>
+
+<div class="viewcode-block" id="Broker.deregister"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.deregister">[docs]</a>    <span class="k">def</span> <span class="nf">deregister</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;A server can deregister a service from EntireX Broker&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_DEREGISTER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_QUIESCE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.endConversation"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.endConversation">[docs]</a>    <span class="k">def</span> <span class="nf">endConversation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A client or server can terminate one or more conversations.</span>
+<span class="sd">           This is the EOC function in ACI terms</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_EOC</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">option</span>    <span class="c1"># set to CANCEL to abort conversation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.logon"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.logon">[docs]</a>    <span class="k">def</span> <span class="nf">logon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">newpassword</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="s2">&quot;Establish communication with a Broker kernel&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_LOGON</span>
+        <span class="k">if</span> <span class="n">password</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="o">=</span><span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.logoff"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.logoff">[docs]</a>    <span class="k">def</span> <span class="nf">logoff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Terminate communication with Broker kernel&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_LOGOFF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_HOLD</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.receive"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.receive">[docs]</a>    <span class="k">def</span> <span class="nf">receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Used by clients to receive incoming messages and by servers</span>
+<span class="sd">           to receive incoming requests</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_RECEIVE</span>
+        <span class="k">if</span> <span class="n">conv_id</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="n">conv_id</span>
+        <span class="k">if</span> <span class="n">option</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">option</span>
+        <span class="k">if</span> <span class="n">wait</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="n">wait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.receiveNew"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.receiveNew">[docs]</a>    <span class="k">def</span> <span class="nf">receiveNew</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Receive any message from new conversation&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_RECEIVE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;NEW&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">OPT_ANY</span>
+        <span class="k">if</span> <span class="n">wait</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="n">wait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.register"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.register">[docs]</a>    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Used by servers to inform EntireX Broker that a</span>
+<span class="sd">           service is available</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_REGISTER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="o">=</span> <span class="n">option</span>    <span class="c1"># only valid option: ATTACH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.send"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Used by clients to send requests and servers to send replies&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_SEND</span>
+        <span class="k">if</span> <span class="n">conv_id</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="n">conv_id</span>
+        <span class="k">if</span> <span class="n">option</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="o">==</span> <span class="n">OPT_COMMIT</span><span class="p">:</span>
+            <span class="c1"># self.conv_id=&#39;&#39;          # keep conv_id</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>              <span class="c1"># reset uow fields</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="o">==</span> <span class="n">OPT_EOC</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span>            <span class="c1"># reset conv/uow fields</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span></div>
+
+<div class="viewcode-block" id="Broker.syncpoint"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.syncpoint">[docs]</a>    <span class="k">def</span> <span class="nf">syncpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Function allows to manage Units of Work (UOWs)&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_SYNCPOINT</span>
+        <span class="k">if</span> <span class="n">option</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">option</span><span class="o">=</span><span class="n">option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">option</span> <span class="o">==</span> <span class="n">OPT_COMMIT</span><span class="p">:</span>  <span class="c1"># reset conv/uow fields</span>
+            <span class="c1"># self.conv_id=&#39;&#39;          # leave conversation open</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uowStatus</span><span class="o">=</span><span class="n">RECV_NONE</span></div>
+
+<div class="viewcode-block" id="Broker.undo"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.undo">[docs]</a>    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove messages that have been sent out but not received&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_UNDO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Broker.version"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Broker.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;return the version of the EntireX Broker Stub&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">=</span><span class="n">FCT_VERSION</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_api_version</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_api_version</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_buffer</span><span class="o">.</span><span class="n">buf2str</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">return_length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span></div></div>
+
+
+<div class="viewcode-block" id="ParmsBrokerService"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.ParmsBrokerService">[docs]</a><span class="k">class</span> <span class="nc">ParmsBrokerService</span><span class="p">:</span>
+    <span class="s2">&quot;Defines parameters for a Broker service&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>\
+                 <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">server_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broker_id</span><span class="o">=</span><span class="n">broker_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_class</span><span class="o">=</span><span class="n">server_class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_name</span><span class="o">=</span><span class="n">server_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">=</span><span class="n">service</span></div>
+
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;v.r.l&#39;</span>
+<span class="k">if</span> <span class="n">__version__</span> <span class="o">==</span> <span class="s1">&#39;v.r.l&#39;</span><span class="p">:</span>
+    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2018-06-19 18:08:34 +0200 (Di, 19 Jun 2018) $&#39;</span>
+    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 839 $&#39;</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;Dev &#39;</span> <span class="o">+</span>  <span class="n">_svnrev</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_svndate</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c1">#  Copyright 2004-ThisYear Software AG</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2004-2019, software AG
+      <span class="lastupdated">
+        Last updated on Dec 11, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

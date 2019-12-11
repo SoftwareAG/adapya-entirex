@@ -1,0 +1,1246 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>adapya.entirex.cmdinfo &mdash; adapya-entirex 1.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/SAG2015.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> adapya-entirex
+          
+
+          
+            
+            <img src="../../../_static/SAG2015.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripts.html">Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">adapya-entirex</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>adapya.entirex.cmdinfo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for adapya.entirex.cmdinfo</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python</span>
+<span class="c1"># -*- coding: latin1 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;cmdinfo.py interface to Webmethods EntireX Broker CIS Services</span>
+<span class="sd">and service explorer</span>
+
+<span class="sd">Only a selection of the available fields is shown (see _FIELDS)</span>
+
+<span class="sd">This covers the Broker API for Command and Information Services V9.7</span>
+
+<span class="sd">Usage: cmdinfo [options]</span>
+
+<span class="sd">Options::</span>
+
+<span class="sd">    -h, --help              display this help</span>
+<span class="sd">    -b, --broker ..         id of broker ETBxxxxx or hostname:port</span>
+
+<span class="sd">    -c, --class ..          Broker server class (selector)</span>
+<span class="sd">    -d  --detail            info request detailed conversation/uows</span>
+<span class="sd">    -n, --name ..           Broker server name (selector)</span>
+<span class="sd">    -k, --token ..          Token</span>
+<span class="sd">    -m, --maxinfo ..        Receive buffer length - default 32768</span>
+<span class="sd">    -o, --option ..         Option: QUIESCE, IMMED (first char suffices)</span>
+<span class="sd">    -p, --puid              Physical user id (selector)</span>
+<span class="sd">    -q, --seqno &lt;int&gt;       Sequence number (selector)</span>
+<span class="sd">    -s, --service ..        Broker service (selector)</span>
+<span class="sd">                              short: -s class/server/service</span>
+<span class="sd">    -i, --infouid ..        user id for broker communication</span>
+<span class="sd">    -u, --userid ..         user id for information on active clients (selector)</span>
+<span class="sd">    -v, --convid ..         conversation id (selector)</span>
+<span class="sd">    -w, --uowid ..          unit of work (selector)</span>
+<span class="sd">    -x, --password ..       password</span>
+<span class="sd">    -t, --trace ..          sum of trace flags</span>
+<span class="sd">                            1 - dump buffers before Broker call</span>
+<span class="sd">                            2 -              after call</span>
+<span class="sd">                            4 - print broker calls, short and data</span>
+<span class="sd">                            8 - detailed print of buffers</span>
+
+<span class="sd">    CIS commands (default command: info)</span>
+
+<span class="sd">    -S, --shutdown          needs parameters convid or service or seqno (for server)</span>
+<span class="sd">                             or userid/puid/token for client</span>
+<span class="sd">    -P, --purge &lt;uowid&gt;     psf remove uow from persistent store</span>
+<span class="sd">    -T, --btrace &lt;level&gt;    Broker trace on level 1-8, 0 switch off</span>
+
+
+<span class="sd">Example::</span>
+
+<span class="sd">    1. show all services for broker class REPTOR and server MMSERV</span>
+<span class="sd">       and related conversations, units of work and servers;</span>
+<span class="sd">       show clients starting with userid MM</span>
+<span class="sd">       show general broker information first::</span>
+
+<span class="sd">         &gt; cmdinfo -b zos3:3800 -u MM -s REPTOR/MMSERV/*</span>
+
+<span class="sd">    2. shutdown a participant identified by userid, service and/or conversation::</span>
+
+<span class="sd">         &gt; cmdinfo -b zos3:3800 -Su OUT4_Reader</span>
+<span class="sd">                                -Ss REPTOR/MMSERV/OUT4</span>
+<span class="sd">                                -Sv 1290000000000105</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
+
+<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="k">import</span> <span class="n">Abuf</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="k">import</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="k">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> \
+    <span class="n">Uint2</span><span class="p">,</span> <span class="n">Uint4</span><span class="p">,</span> <span class="n">Uint8</span><span class="p">,</span> <span class="n">T_HEX</span><span class="p">,</span> <span class="n">T_IN</span><span class="p">,</span> <span class="n">T_OUT</span><span class="p">,</span> <span class="n">T_INOUT</span><span class="p">,</span> <span class="n">T_NONE</span><span class="p">,</span> <span class="n">str_str</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dtconv</span> <span class="k">import</span> <span class="n">intervalstr</span>
+<span class="kn">from</span> <span class="nn">adapya.entirex.broker</span> <span class="k">import</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">BrokerException</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">localtime</span><span class="p">,</span> <span class="n">strftime</span>
+
+<span class="n">cis_version</span><span class="o">=</span><span class="mi">10</span>
+<span class="c1"># try this Broker version where Info_* classes in etbcinf.py can be used</span>
+<span class="c1"># initial communication with Broker the kernel version determines if</span>
+<span class="c1"># the classes need to be imported from etcinf8.py</span>
+
+
+<div class="viewcode-block" id="CISError"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.CISError">[docs]</a><span class="k">class</span> <span class="nc">CISError</span><span class="p">(</span><span class="n">BrokerException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Example use:</span>
+<span class="sd">    try:</span>
+<span class="sd">        info = cis.iget(...)</span>
+<span class="sd">    except CISError as e:</span>
+<span class="sd">        if e.epa.cishdr.error_code == x:</span>
+<span class="sd">            print(&#39;\nCIS error: %s on %s/%s/%s&#39; %(e.value,</span>
+<span class="sd">                sv.server_class,sv.server,sv.service))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">epa</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epa</span> <span class="o">=</span> <span class="n">epa</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+<span class="n">stckintervalstr</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">intervalstr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mf">1.048576</span><span class="p">))</span>
+<span class="n">localtime_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span><span class="n">localtime</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">usage</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># --- EntireX Broker CIS Objects Constants ----------------------------</span>
+<span class="c1">#                        * = no further selection crit. needed</span>
+<span class="n">CIO_BROKER</span> <span class="o">=</span> <span class="mi">7</span>          <span class="c1">#*</span>
+<span class="n">CIO_CLIENT</span> <span class="o">=</span> <span class="mi">2</span>          <span class="c1">#   active clients</span>
+<span class="n">CIO_CMDLOG_FILTER</span> <span class="o">=</span> <span class="mi">23</span>  <span class="c1">#</span>
+<span class="n">CIO_CONVERSATION</span> <span class="o">=</span> <span class="mi">4</span>    <span class="c1">#  active conversations</span>
+<span class="n">CIO_NET</span> <span class="o">=</span> <span class="mi">24</span>            <span class="c1">#* (INF) NET-WORK</span>
+<span class="n">CIO_PARTICIPANT</span> <span class="o">=</span> <span class="mi">18</span>    <span class="c1">#</span>
+<span class="n">CIO_POOL_USAGE</span> <span class="o">=</span> <span class="mi">25</span>     <span class="c1">#* (INF) pool usage and dynam. memory management</span>
+<span class="n">CIO_PSF</span> <span class="o">=</span> <span class="mi">9</span>             <span class="c1">#  (INF) unit of work status</span>
+<span class="n">CIO_PSFADA</span> <span class="o">=</span> <span class="mi">12</span>         <span class="c1">#* (INF) Adabas persistent store</span>
+<span class="n">CIO_PSFCTREE</span> <span class="o">=</span> <span class="mi">20</span>       <span class="c1">#* (INF) c-tree persistent store</span>
+<span class="n">CIO_PSFDIV</span> <span class="o">=</span> <span class="mi">11</span>         <span class="c1">#* (INF) DIV persistent store</span>
+<span class="n">CIO_PSFFILE</span> <span class="o">=</span> <span class="mi">13</span>        <span class="c1">#* (INF) (deprecated)</span>
+<span class="n">CIO_PSFMSG</span> <span class="o">=</span> <span class="mi">10</span>         <span class="c1">#  (INF)</span>
+<span class="n">CIO_PUBLICATION</span> <span class="o">=</span> <span class="mi">16</span>    <span class="c1">#  (INF) active publications (deprecated)</span>
+<span class="n">CIO_PUBLISHER</span> <span class="o">=</span> <span class="mi">15</span>      <span class="c1">#  (INF) active publishers (deprecated)</span>
+<span class="n">CIO_RESOURCE_USAGE</span> <span class="o">=</span> <span class="mi">26</span> <span class="c1">#* (INF) Broker resource usage</span>
+<span class="n">CIO_SECURITY</span> <span class="o">=</span> <span class="mi">21</span>       <span class="c1">#*</span>
+<span class="n">CIO_SERVER</span> <span class="o">=</span> <span class="mi">1</span>          <span class="c1">#  active servers</span>
+<span class="n">CIO_SERVICE</span> <span class="o">=</span> <span class="mi">6</span>         <span class="c1">#  active services</span>
+<span class="n">CIO_SSL</span> <span class="o">=</span> <span class="mi">22</span>            <span class="c1">#* SSL communication</span>
+<span class="n">CIO_STATISTICS</span> <span class="o">=</span> <span class="mi">27</span>     <span class="c1">#* (INF) stats on Broker resources</span>
+<span class="n">CIO_SUBSCRIBER</span> <span class="o">=</span> <span class="mi">14</span>     <span class="c1">#  (deprecated)</span>
+<span class="n">CIO_TCP</span> <span class="o">=</span> <span class="mi">19</span>            <span class="c1">#* (INF) TCP communications</span>
+<span class="n">CIO_TRANSPORT</span> <span class="o">=</span> <span class="mi">29</span>      <span class="c1">#  (CMD)</span>
+<span class="n">CIO_TOPIC</span> <span class="o">=</span> <span class="mi">17</span>          <span class="c1">#  (INF) active topics (deprecated)</span>
+<span class="n">CIO_UOW_STATISTICS</span> <span class="o">=</span> <span class="mi">31</span> <span class="c1">#  (INF) stats on Broker resources</span>
+<span class="n">CIO_USER</span> <span class="o">=</span> <span class="mi">28</span>           <span class="c1">#  (INF) Info on all users</span>
+<span class="n">CIO_WORKER</span> <span class="o">=</span> <span class="mi">8</span>          <span class="c1">#  (INF) Info on all workers</span>
+<span class="n">CIO_WORKER_USAGE</span> <span class="o">=</span> <span class="mi">8</span>    <span class="c1">#* (INF) Info on all workers</span>
+
+<span class="n">cio_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span><span class="mi">7</span><span class="p">:</span><span class="s1">&#39;BROKER&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;CLIENT&#39;</span><span class="p">,</span><span class="mi">23</span><span class="p">:</span> <span class="s1">&#39;CMDLOG_FILTER&#39;</span><span class="p">,</span>
+            <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;CONVERSATION&#39;</span><span class="p">,</span><span class="mi">24</span><span class="p">:</span><span class="s1">&#39;NET&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">:</span><span class="s1">&#39;PARTICIPANT&#39;</span><span class="p">,</span>
+            <span class="mi">25</span><span class="p">:</span><span class="s1">&#39;POOL_USAGE&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span><span class="s1">&#39;PSF&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="s1">&#39;PSFADA&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="s1">&#39;PSFCTREE&#39;</span><span class="p">,</span>
+            <span class="mi">11</span><span class="p">:</span><span class="s1">&#39;PSFDIV&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="s1">&#39;PUBLICATION&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span><span class="s1">&#39;PUBLISHER&#39;</span><span class="p">,</span> <span class="mi">26</span><span class="p">:</span><span class="s1">&#39;RESOURC_USAGE&#39;</span><span class="p">,</span>
+            <span class="mi">21</span><span class="p">:</span><span class="s1">&#39;SECURITY&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;SERVER&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s1">&#39;SERVICE&#39;</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="s1">&#39;SSL&#39;</span><span class="p">,</span><span class="mi">27</span><span class="p">:</span><span class="s1">&#39;STATISTICS&#39;</span><span class="p">,</span>
+            <span class="mi">14</span><span class="p">:</span><span class="s1">&#39;SUBSCRIBER&#39;</span><span class="p">,</span><span class="mi">19</span><span class="p">:</span><span class="s1">&#39;TCP&#39;</span><span class="p">,</span> <span class="mi">29</span><span class="p">:</span><span class="s1">&#39;TRANSPORT&#39;</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="s1">&#39;TOPIC&#39;</span><span class="p">,</span>
+            <span class="mi">31</span><span class="p">:</span><span class="s1">&#39;UOW_STATISTICS&#39;</span><span class="p">,</span> <span class="mi">28</span><span class="p">:</span><span class="s1">&#39;USER&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;WORKER&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;WORKER_USAGE&#39;</span><span class="p">})</span>
+
+
+<span class="c1"># --- EntireX Broker CIS Commands Constants ----------------------------</span>
+<span class="n">CIC_ALLOW_NEWUOWMSGS</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">CIC_CLEAR_CMDLOG_FILTER</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">CIC_CONNECT_PSTORE</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">CIC_DISABLE_ACCOUNTING</span> <span class="o">=</span> <span class="mi">28</span>
+<span class="n">CIC_DISABLE_CMDLOG</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">CIC_DISABLE_CMDLOG_FILTER</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="n">CIC_DISABLE_DYN_WORKER</span> <span class="o">=</span> <span class="mi">37</span>
+<span class="n">CIC_DISCONNECT_PSTORE</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">CIC_DISPLAY_REQUESTS</span> <span class="o">=</span> <span class="mi">45</span>   <span class="c1"># display number of requests</span>
+<span class="n">CIC_ENABLE_ACCOUNTING</span> <span class="o">=</span> <span class="mi">27</span>
+<span class="n">CIC_ENABLE_CMDLOG</span> <span class="o">=</span> <span class="mi">23</span>
+<span class="n">CIC_ENABLE_CMDLOG_FILTER</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="n">CIC_ENABLE_DYN_WORKER</span> <span class="o">=</span> <span class="mi">38</span>
+<span class="n">CIC_FORBID_NEWUOWMSGS</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">CIC_NO_OPERATION</span> <span class="o">=</span> <span class="mi">88</span>
+<span class="n">CIC_PRODUCE_STATISTICS</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="n">CIC_PURGE</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">CIC_RESET_USER</span> <span class="o">=</span> <span class="mi">29</span>
+<span class="n">CIC_RESUME</span> <span class="o">=</span> <span class="mi">31</span>
+<span class="n">CIC_SET_CMDLOG_FILTER</span> <span class="o">=</span> <span class="mi">19</span>
+<span class="n">CIC_SET_SINGLE_CONVERSATION</span> <span class="o">=</span> <span class="mi">40</span>  <span class="c1"># requires interface V8</span>
+<span class="n">CIC_SET_UOW_STATUS</span> <span class="o">=</span> <span class="mi">42</span>  <span class="c1"># requires V10</span>
+<span class="n">CIC_SHUTDOWN</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">CIC_START</span> <span class="o">=</span> <span class="mi">33</span>
+<span class="n">CIC_STATUS</span> <span class="o">=</span> <span class="mi">36</span>
+<span class="n">CIC_STOP</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">CIC_SUBSCRIBE</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># deprecated</span>
+<span class="n">CIC_SUSPEND</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">CIC_SWITCH_CMDLOG</span> <span class="o">=</span> <span class="mi">26</span>
+<span class="n">CIC_TRACE_FLUSH</span> <span class="o">=</span> <span class="mi">35</span>
+<span class="n">CIC_TRACE_OFF</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">CIC_TRACE_ON</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">CIC_TRAP_ERROR</span> <span class="o">=</span> <span class="mi">34</span>
+<span class="n">CIC_UNSUBSCRIBE</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1"># deprecated</span>
+
+<span class="n">cic_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span>
+    <span class="mi">13</span><span class="p">:</span><span class="s1">&#39;ALLOW_NEWUOWMSGS&#39;</span><span class="p">,</span><span class="mi">20</span><span class="p">:</span><span class="s1">&#39;CLEAR_CMDLOG_FILTER&#39;</span><span class="p">,</span><span class="mi">17</span><span class="p">:</span><span class="s1">&#39;CONNECT_PSTORE&#39;</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">:</span><span class="s1">&#39;DISABLE_ACCOUNTING&#39;</span><span class="p">,</span><span class="mi">24</span><span class="p">:</span><span class="s1">&#39;DISABLE_CMDLOG&#39;</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="s1">&#39;DISABLE_CMDLOG_FILTER&#39;</span><span class="p">,</span>
+    <span class="mi">37</span><span class="p">:</span><span class="s1">&#39;DISABLE_DYN_WORKER&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">:</span><span class="s1">&#39;DISCONNECT_PSTORE&#39;</span><span class="p">,</span><span class="mi">27</span><span class="p">:</span><span class="s1">&#39;ENABLE_ACCOUNTING&#39;</span><span class="p">,</span>
+    <span class="mi">23</span><span class="p">:</span><span class="s1">&#39;ENABLE_CMDLOG&#39;</span><span class="p">,</span><span class="mi">21</span><span class="p">:</span><span class="s1">&#39;ENABLE_CMDLOG_FILTER&#39;</span><span class="p">,</span><span class="mi">38</span><span class="p">:</span><span class="s1">&#39;ENABLE_DYN_WORKER&#39;</span><span class="p">,</span>
+    <span class="mi">14</span><span class="p">:</span><span class="s1">&#39;FORBID_NEWUOWMSGS&#39;</span><span class="p">,</span><span class="mi">88</span><span class="p">:</span><span class="s1">&#39;NO_OPERATION&#39;</span><span class="p">,</span><span class="mi">25</span><span class="p">:</span><span class="s1">&#39;PRODUCE_STATISTICS&#39;</span><span class="p">,</span>
+    <span class="mi">12</span><span class="p">:</span><span class="s1">&#39;PURGE&#39;</span><span class="p">,</span><span class="mi">29</span><span class="p">:</span><span class="s1">&#39;RESET_USER&#39;</span><span class="p">,</span><span class="mi">31</span><span class="p">:</span><span class="s1">&#39;RESUME&#39;</span><span class="p">,</span><span class="mi">19</span><span class="p">:</span><span class="s1">&#39;SET_CMDLOG_FILTER&#39;</span><span class="p">,</span>
+    <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;SHUTDOWN&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">:</span><span class="s1">&#39;START&#39;</span><span class="p">,</span><span class="mi">36</span><span class="p">:</span><span class="s1">&#39;STATUS&#39;</span><span class="p">,</span><span class="mi">32</span><span class="p">:</span><span class="s1">&#39;STOP&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">:</span><span class="s1">&#39;SUBSCRIBE&#39;</span><span class="p">,</span>
+    <span class="mi">30</span><span class="p">:</span><span class="s1">&#39;SUSPEND&#39;</span><span class="p">,</span><span class="mi">26</span><span class="p">:</span><span class="s1">&#39;SWITCH_CMDLOG&#39;</span><span class="p">,</span><span class="mi">35</span><span class="p">:</span><span class="s1">&#39;TRACE_FLUSH&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;TRACE_OFF&#39;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;TRACE_ON&#39;</span><span class="p">,</span><span class="mi">34</span><span class="p">:</span><span class="s1">&#39;TRAP_ERROR&#39;</span><span class="p">,</span><span class="mi">16</span><span class="p">:</span><span class="s1">&#39;UNSUBSCRIBE&#39;</span><span class="p">}</span> <span class="p">)</span>
+
+
+<span class="c1"># --- EntireX Broker CIS Options Constants ----------------------------</span>
+<span class="n">CIP_IMMED</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">CIP_QUIESCE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">CIP_TR_LEVEL1</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="n">CIP_TR_LEVEL2</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">CIP_TR_LEVEL3</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">CIP_TR_LEVEL4</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">CIP_TR_LEVEL5</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">CIP_TR_LEVEL6</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">CIP_TR_LEVEL7</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">CIP_TR_LEVEL8</span> <span class="o">=</span> <span class="mi">18</span>
+
+<span class="n">CIP_UOW_STATUS_ACCEPTED</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">CIP_UOW_STATUS_CANCELLED</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="n">CIP_ETB_FORCE</span> <span class="o">=</span> <span class="mi">26</span>    <span class="c1"># Forced operation</span>
+<span class="n">CIP_ETB_PREFETCH</span> <span class="o">=</span> <span class="mi">27</span> <span class="c1"># ARF: OPTION PREFETCH</span>
+
+
+<span class="n">cip_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;CIP_IMMED&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;QUIESCE&#39;</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL1&#39;</span><span class="p">,</span>
+            <span class="mi">12</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL2&#39;</span><span class="p">,</span><span class="mi">13</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL3&#39;</span><span class="p">,</span><span class="mi">14</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL4&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL5&#39;</span><span class="p">,</span>
+            <span class="mi">16</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL6&#39;</span><span class="p">,</span><span class="mi">17</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL7&#39;</span><span class="p">,</span><span class="mi">18</span><span class="p">:</span><span class="s1">&#39;TR_LEVEL8&#39;</span><span class="p">,</span>
+            <span class="mi">20</span><span class="p">:</span><span class="s1">&#39;UOW_STATUS_ACCEPTED&#39;</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span><span class="s1">&#39;UOW_STATUS_CANCELLED&#39;</span><span class="p">,</span>
+            <span class="mi">26</span><span class="p">:</span><span class="s1">&#39;ETB_FORCE&#39;</span><span class="p">,</span> <span class="mi">27</span><span class="p">:</span><span class="s1">&#39;ETB_PREFETCH&#39;</span> <span class="p">}</span> <span class="p">)</span>
+
+
+<span class="c1"># Broker Information service Error Codes</span>
+<span class="n">bis_error</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Successful response&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Invalid block length&#39;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;Invalid VERSION&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;OBJECT-TYPE missing&#39;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span><span class="s1">&#39;Nothing found for this request&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="s1">&#39;Invalid OBJECT-TYPE&#39;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span><span class="s1">&#39;Invalid Info Level&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="s1">&#39;Block length too short for Object Type&#39;</span><span class="p">,</span>
+    <span class="mi">8</span><span class="p">:</span><span class="s1">&#39;User selection must be unique&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span><span class="s1">&#39;Service selection must be unique&#39;</span><span class="p">,</span>
+    <span class="mi">10</span><span class="p">:</span><span class="s1">&#39;Topic name must be specified (deprecated)&#39;</span><span class="p">,</span>
+    <span class="mi">11</span><span class="p">:</span><span class="s1">&#39;PUID not possible with Info Level SHORT&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="c1"># Broker command service Error Codes</span>
+<span class="n">bcs_error</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span><span class="s1">&#39;Successful response&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;Invalid VERSION&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;OBJECT-TYPE is missing&#39;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span><span class="s1">&#39;Invalid OBJECT-TYPE&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="s1">&#39;The user is not authorized to issue Broker commands&#39;</span><span class="p">,</span>
+    <span class="mi">21</span><span class="p">:</span><span class="s1">&#39;Invalid COMMAND&#39;</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span><span class="s1">&#39;Invalid OPTION&#39;</span><span class="p">,</span> <span class="mi">23</span><span class="p">:</span><span class="s1">&#39;Shutdown possible for servers only&#39;</span><span class="p">,</span>
+    <span class="mi">24</span><span class="p">:</span><span class="s1">&#39;Participant not found&#39;</span><span class="p">,</span> <span class="mi">25</span><span class="p">:</span><span class="s1">&#39;Purge UOW failed&#39;</span><span class="p">,</span>
+    <span class="mi">26</span><span class="p">:</span><span class="s1">&#39;User specification must be unique&#39;</span><span class="p">,</span> <span class="mi">27</span><span class="p">:</span><span class="s1">&#39;Topic name must be specified (deprecated)&#39;</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">:</span><span class="s1">&#39;Add subscription failed (deprecated)&#39;</span><span class="p">,</span> <span class="mi">29</span><span class="p">:</span><span class="s1">&#39;Remove subscription failed (deprecated)&#39;</span><span class="p">,</span>
+    <span class="mi">30</span><span class="p">:</span><span class="s1">&#39;User must be specified&#39;</span><span class="p">,</span> <span class="mi">31</span><span class="p">:</span><span class="s1">&#39;Class/Server/Service must be unique&#39;</span><span class="p">,</span>
+    <span class="mi">32</span><span class="p">:</span><span class="s1">&#39;Class and Topic cannot both be specified (deprecated)&#39;</span><span class="p">,</span> <span class="mi">33</span><span class="p">:</span><span class="s1">&#39;Class, Topic or User must be specified&#39;</span><span class="p">,</span>
+    <span class="mi">34</span><span class="p">:</span><span class="s1">&#39;Set command log filter failed&#39;</span><span class="p">,</span> <span class="mi">35</span><span class="p">:</span><span class="s1">&#39;Clear command log filter failed&#39;</span><span class="p">,</span>
+    <span class="mi">36</span><span class="p">:</span><span class="s1">&#39;Enable command log filter failed&#39;</span><span class="p">,</span> <span class="mi">37</span><span class="p">:</span><span class="s1">&#39;Disable command log filter failed&#39;</span><span class="p">,</span>
+    <span class="mi">38</span><span class="p">:</span><span class="s1">&#39;Switch command log files failed&#39;</span><span class="p">,</span> <span class="mi">39</span><span class="p">:</span><span class="s1">&#39;Set security trace level failed&#39;</span><span class="p">,</span>
+    <span class="mi">40</span><span class="p">:</span><span class="s1">&#39;Set PSTORE (PSF) trace level failed&#39;</span><span class="p">,</span> <span class="mi">41</span><span class="p">:</span><span class="s1">&#39;Enable command logging failed&#39;</span><span class="p">,</span>
+    <span class="mi">42</span><span class="p">:</span><span class="s1">&#39;Disable command logging failed&#39;</span><span class="p">,</span> <span class="mi">43</span><span class="p">:</span><span class="s1">&#39;Connect PSTORE failed&#39;</span><span class="p">,</span>
+    <span class="mi">44</span><span class="p">:</span><span class="s1">&#39;Disconnect PSTORE failed&#39;</span><span class="p">,</span> <span class="mi">45</span><span class="p">:</span><span class="s1">&#39;Allow new UOW messages failed&#39;</span><span class="p">,</span>
+    <span class="mi">46</span><span class="p">:</span><span class="s1">&#39;Forbid new UOW messages failed&#39;</span><span class="p">,</span> <span class="mi">47</span><span class="p">:</span><span class="s1">&#39;Enable accounting failed&#39;</span><span class="p">,</span>
+    <span class="mi">48</span><span class="p">:</span><span class="s1">&#39;Disable accounting failed&#39;</span><span class="p">,</span> <span class="mi">49</span><span class="p">:</span><span class="s1">&#39;Reset user failed&#39;</span><span class="p">,</span>
+    <span class="mi">50</span><span class="p">:</span><span class="s1">&#39;Command refused in current RUN-MODE&#39;</span><span class="p">,</span> <span class="mi">51</span><span class="p">:</span><span class="s1">&#39;Service must be specified&#39;</span><span class="p">,</span>
+    <span class="mi">52</span><span class="p">:</span><span class="s1">&#39;Service not found&#39;</span><span class="p">,</span> <span class="mi">53</span><span class="p">:</span><span class="s1">&#39;CONVID must be specified&#39;</span><span class="p">,</span> <span class="mi">54</span><span class="p">:</span><span class="s1">&#39;Conversation not found&#39;</span><span class="p">,</span>
+    <span class="mi">55</span><span class="p">:</span><span class="s1">&#39;Cannot inhibit Conversation&#39;</span><span class="p">,</span> <span class="mi">56</span><span class="p">:</span><span class="s1">&#39;Only supported for messages&#39;</span><span class="p">,</span>
+    <span class="mi">57</span><span class="p">:</span><span class="s1">&#39;Cannot lock Conversation&#39;</span><span class="p">,</span> <span class="mi">58</span><span class="p">:</span><span class="s1">&#39;Not for currently running Conversation&#39;</span><span class="p">,</span>
+    <span class="mi">59</span><span class="p">:</span><span class="s1">&#39;Security violation detected&#39;</span><span class="p">,</span> <span class="mi">60</span><span class="p">:</span><span class="s1">&#39;Invalid transport ID&#39;</span><span class="p">,</span>
+    <span class="mi">61</span><span class="p">:</span><span class="s1">&#39;Cannot execute command&#39;</span><span class="p">,</span> <span class="mi">62</span><span class="p">:</span><span class="s1">&#39;Command ignored. Only one Communicator left&#39;</span><span class="p">,</span>
+    <span class="mi">63</span><span class="p">:</span><span class="s1">&#39;Command ignored. Cannot stop all Communicators&#39;</span><span class="p">,</span> <span class="mi">64</span><span class="p">:</span><span class="s1">&#39;Communicator currently not suspended&#39;</span><span class="p">,</span>
+    <span class="mi">65</span><span class="p">:</span><span class="s1">&#39;Communicator currently not stopped&#39;</span><span class="p">,</span> <span class="mi">66</span><span class="p">:</span><span class="s1">&#39;Communicator currently not active&#39;</span><span class="p">,</span>
+    <span class="mi">67</span><span class="p">:</span><span class="s1">&#39;Enable Dynamic Worker Management failed&#39;</span><span class="p">,</span> <span class="mi">68</span><span class="p">:</span><span class="s1">&#39;Disable Dynamic Worker Management failed&#39;</span><span class="p">,</span>
+    <span class="mi">69</span><span class="p">:</span><span class="s1">&#39;Transport reserved for Broker Service&#39;</span><span class="p">,</span> <span class="mi">70</span><span class="p">:</span><span class="s1">&#39;TRACE-FLUSH failed&#39;</span><span class="p">,</span>
+    <span class="mi">71</span><span class="p">:</span><span class="s1">&#39;Cannot set single-conversation mode because service is being used in other mode&#39;</span>\
+       <span class="s1">&#39; (still active conversations for service)&#39;</span><span class="p">,</span>
+    <span class="mi">72</span><span class="p">:</span><span class="s1">&#39;Verification of attribute file failed&#39;</span><span class="p">,</span> <span class="mi">73</span><span class="p">:</span><span class="s1">&#39;Cannot delete deferred service with UOW&#39;</span><span class="p">,</span>
+    <span class="mi">74</span><span class="p">:</span><span class="s1">&#39;Cannot set UOW status&#39;</span><span class="p">,</span> <span class="mi">75</span><span class="p">:</span><span class="s1">&#39;Cannot add service to SCM record&#39;</span><span class="p">,</span>
+    <span class="mi">76</span><span class="p">:</span><span class="s1">&#39;Update SCM record failed&#39;</span><span class="p">,</span> <span class="mi">77</span><span class="p">:</span><span class="s1">&#39;Conversation contains unprocessed UOWs&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="c1"># --- EntireX Broker Command Request Structure ------------------------</span>
+<div class="viewcode-block" id="Cisreq"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Cisreq">[docs]</a><span class="k">class</span> <span class="nc">Cisreq</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">(</span>                        <span class="c1"># Available with CIS Interface version</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">,</span>         <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 1 Interface version</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;object_type&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">,</span> <span class="n">ppfunc</span><span class="o">=</span><span class="n">cio_str</span><span class="p">),</span> <span class="c1"># 1 Object type to which the command applies</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">,</span> <span class="n">ppfunc</span><span class="o">=</span><span class="n">cic_str</span><span class="p">),</span>     <span class="c1"># 1 CIS command</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;option&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">,</span> <span class="n">ppfunc</span><span class="o">=</span><span class="n">cip_str</span><span class="p">),</span>      <span class="c1"># 1 CIS option</span>
+        <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;puid&#39;</span><span class="p">,</span>         <span class="mi">28</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_HEX</span><span class="p">),</span><span class="c1"># 1 internal userid that distinguishes users with same userids</span>
+                                            <span class="c1">#   id obtained from previous call, no translation done</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uowid&#39;</span><span class="p">,</span>       <span class="mi">16</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 2 Selector, optional, unit of work to be purged</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">,</span>       <span class="mi">96</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 4 Selector, optional, topic to be subscribed or unsubscribed to</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span>         <span class="mi">32</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 4 Selector, optional, user name for subscription/unsubscription</span>
+                                            <span class="c1">#   and participant shutdown</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;token&#39;</span><span class="p">,</span>       <span class="mi">32</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 4 Selector, optional, token for subscription/unsubscription</span>
+                                            <span class="c1">#   and participant shutdown</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server_class&#39;</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 5 Selector, optional, for command log filter addition or removal</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server&#39;</span><span class="p">,</span>      <span class="mi">32</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 5 Selector, optional, for command log filter addition or removal</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;service&#39;</span><span class="p">,</span>     <span class="mi">32</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 5 Selector, optional, for command log filter addition or removal</span>
+        <span class="n">Filler</span><span class="p">(</span><span class="s1">&#39;reserved&#39;</span><span class="p">,</span>    <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 5 Reserved</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;conv_id&#39;</span><span class="p">,</span>     <span class="mi">16</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 7 Selector, optional, for shutdown conversation</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;transportid&#39;</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 7 Selector, optional, for transport task (NET|Snn|Tnn)</span>
+                                            <span class="c1">#   required for RESUME,START,STATUS,STOP,SUSPEND</span>
+        <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;exclude_attach&#39;</span><span class="p">,</span>  <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 7 Optional. Exclude attach servers when shutting down a service</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;seqno&#39;</span><span class="p">,</span>           <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 7 Optional. Sequence number of participant (e.g. client, server,</span>
+                                            <span class="c1">#   publisher) to be shut down. Can be used instead of puid</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;error_number&#39;</span><span class="p">,</span>    <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 7 Optional. Sequence number of participant (e.g. client, server,</span>
+        <span class="p">)</span>
+        <span class="n">Datamap</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Cisreq&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Cisreq.reset"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Cisreq.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="n">cis_version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reset values of the CIS Request instance &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span>                      <span class="c1"># interface level 8</span>
+            <span class="c1"># init alpha selection fields with blanks</span>
+            <span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">seqno</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">server</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">topic</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">transportid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">uowid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+<span class="n">errinf_str</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">str_str</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span><span class="s1">&#39;OK&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;Invalid block length&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;Invalid API version&#39;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span><span class="s1">&#39;Object Type missing&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s1">&#39;Nothing found for this request&#39;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span><span class="s1">&#39;Invalid Object Type&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s1">&#39;Invalid Info Level&#39;</span><span class="p">,</span>
+    <span class="mi">7</span><span class="p">:</span><span class="s1">&#39;Block length too short for Obj. Type&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s1">&#39;User selection must be unique&#39;</span><span class="p">,</span>
+    <span class="mi">9</span><span class="p">:</span><span class="s1">&#39;Service selection must be unique&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">:</span> <span class="s1">&#39;Topic name must be specified&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+
+
+<span class="c1"># --- EntireX Broker CIS Response Header ------------------------------</span>
+<span class="c1"># (Struct HD_CIS). Common header used by information services and</span>
+<span class="c1"># the command service.</span>
+<span class="c1"># The header structure is always the first structure</span>
+<span class="c1"># in the receive buffer that comes back from an information</span>
+<span class="c1"># or command service request. Even receive buffers obtained</span>
+<span class="c1"># with subsequent RECEIVE commands have this structure as the</span>
+<span class="c1"># first part of the buffer.</span>
+<div class="viewcode-block" id="Cishdr"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Cishdr">[docs]</a><span class="k">class</span> <span class="nc">Cishdr</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;error_code&#39;</span><span class="p">),</span>                <span class="c1"># 1 CIS return code (0 = OK)</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;totobj&#39;</span><span class="p">),</span>                    <span class="c1"># 1 Total number of objects returned in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;curobj&#39;</span><span class="p">),</span>                    <span class="c1"># 1 Number of objects returned within current receive block</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_sc_len&#39;</span><span class="p">),</span>                <span class="c1"># 1 longest SERVER-CLASS value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_sn_len&#39;</span><span class="p">),</span>                <span class="c1"># 1 longest SERVER-NAME value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_sv_len&#39;</span><span class="p">),</span>                <span class="c1"># 1 longest SERVICE value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_uid_len&#39;</span><span class="p">),</span>               <span class="c1"># 1 longest USER-ID value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_tk_len&#39;</span><span class="p">),</span>                <span class="c1"># 1 longest TOKEN value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_topic_len&#39;</span><span class="p">),</span>             <span class="c1"># 4 longest TOPIC value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;requesttime&#39;</span><span class="p">,</span><span class="n">ppfunc</span><span class="o">=</span><span class="n">localtime_str</span><span class="p">),</span><span class="c1"># 4 time that request was received by broker kernel</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;reserved&#39;</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>       <span class="c1"># 4</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;etb_error_code&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span>         <span class="c1"># 5 Secondary error code from broker kernel</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;etb_error_text&#39;</span><span class="p">,</span><span class="mi">40</span><span class="p">),</span>        <span class="c1"># 5 Secondary error text from broker kernel</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_ppc_lib_len&#39;</span><span class="p">),</span>           <span class="c1"># 6 longest RPC-LIB value in object list</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;max_ppc_pgm_len&#39;</span><span class="p">),</span>           <span class="c1"># 6 longest RPC-PGM value in object list</span>
+        <span class="p">)</span>
+        <span class="n">Datamap</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Cishdr&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># --- EntireX Broker Information Request Structure ------------------------</span>
+<div class="viewcode-block" id="Infreq"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Infreq">[docs]</a><span class="k">class</span> <span class="nc">Infreq</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Information request Structure Class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">(</span>                            <span class="c1"># Available with CIS Interface version</span>
+                                            <span class="c1"># | Optional/Required</span>
+                                            <span class="c1"># | |</span>
+        <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;block_length&#39;</span><span class="p">),</span>              <span class="c1"># 1 R  Return data in this length</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">),</span>                   <span class="c1"># 1 R  Interface version</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;reserved1&#39;</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>      <span class="c1">#</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;object_type&#39;</span><span class="p">),</span>               <span class="c1"># 1 R  Object type for which info is requested</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span>    <span class="mi">32</span><span class="p">),</span>               <span class="c1"># 1 O  Selector user id of client or server</span>
+        <span class="n">Bytes</span><span class="p">(</span><span class="s1">&#39;puid&#39;</span><span class="p">,</span>    <span class="mi">28</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_HEX</span><span class="p">),</span>     <span class="c1"># 1 O  Selector internal userid that distinguishes users</span>
+                                            <span class="c1">#      with same userids, no translation done</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;token&#39;</span><span class="p">,</span>       <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 1 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server_class&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>         <span class="c1"># 1 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;server&#39;</span><span class="p">,</span>      <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 1 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;service&#39;</span><span class="p">,</span>     <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 1 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;conv_id&#39;</span><span class="p">,</span>     <span class="mi">16</span><span class="p">),</span>          <span class="c1"># 1 O  Selector</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;reserved2&#39;</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>      <span class="c1"># 1</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;uowid&#39;</span><span class="p">,</span>       <span class="mi">16</span><span class="p">),</span>          <span class="c1"># 2 O  Selector</span>
+        <span class="n">Uint1</span><span class="p">(</span><span class="s1">&#39;uowstatus&#39;</span><span class="p">),</span>                 <span class="c1"># 2 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;userstatus&#39;</span><span class="p">,</span>  <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;recvuid&#39;</span><span class="p">,</span>     <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector UOW reciever&#39;s user id</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;recvtoken&#39;</span><span class="p">,</span>   <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector UOW reciever&#39;s token</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;recvserver&#39;</span><span class="p">,</span>  <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector UOW reciever&#39;s server name</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;recvservice&#39;</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector UOW reciever&#39;s service name</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;recvclass&#39;</span><span class="p">,</span>   <span class="mi">32</span><span class="p">),</span>          <span class="c1"># 2 O  Selector UOW reciever&#39;s class name</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;reserved3&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>  <span class="c1"># 2</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">,</span> <span class="mi">96</span><span class="p">),</span>                <span class="c1"># 4 O  Selector</span>
+        <span class="n">String</span><span class="p">(</span><span class="s1">&#39;publicationid&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>        <span class="c1"># 4 O  Selector</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;subscriptiontype&#39;</span><span class="p">),</span>          <span class="c1"># 4 O  Selector</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;reserved4&#39;</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>      <span class="c1"># 4</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;conv_type&#39;</span><span class="p">),</span>                 <span class="c1"># 5 O  Selector</span>
+        <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;reserved5&#39;</span><span class="p">,</span><span class="n">opt</span><span class="o">=</span><span class="n">T_NONE</span><span class="p">),</span>      <span class="c1"># 5</span>
+        <span class="p">)</span>
+        <span class="n">Datamap</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Infreq&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Infreq.reset"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Infreq.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="n">cis_version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; reset values of the Information Request instance &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">v</span><span class="p">,</span>                     <span class="c1"># interface level 9 (UOW statistics)</span>
+            <span class="c1"># init alpha selection fields with blanks</span>
+            <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">server</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">uowid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">userstatus</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvuid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvtoken</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvserver</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvservice</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvclass</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">topic</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">publicationid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">Cis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cis</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rcvsize</span><span class="o">=</span><span class="mi">32768</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Command and Information service object</span>
+
+<span class="sd">            cis = default &#39;INFO&#39; - full information on all clients/servers/conversations</span>
+<span class="sd">                  &#39;CMD&#39;          - command services</span>
+<span class="sd">                  &#39;USER-INFO&#39;    - Information limited to user&#39;s own resources</span>
+<span class="sd">                  &#39;PARTICIPANT-SHUTDOWN&#39;</span>
+<span class="sd">                  &#39;SECURITY-CMD&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">cis_version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rcvsize</span><span class="o">=</span><span class="n">rcvsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span> <span class="o">=</span> <span class="n">Broker</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">trace</span> <span class="o">&amp;</span> <span class="mi">7</span>
+        <span class="c1">#bb.trace=1 # dump buffers before Broker calls</span>
+        <span class="c1">#bb.trace=2 # dump buffers after Broker calls</span>
+        <span class="c1"># bb.trace=4 # print Broker calls</span>
+        <span class="c1"># bb.trace=6 # print Broker calls + dump buffers after</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">broker_id</span> <span class="o">=</span> <span class="n">broker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="n">trace</span>
+
+        <span class="c1"># set CIS fixed service names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">server_class</span><span class="o">=</span> <span class="s1">&#39;SAG&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">server_name</span> <span class="o">=</span> <span class="s1">&#39;ETBCIS&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">service</span>     <span class="o">=</span>  <span class="n">cis</span>       <span class="c1"># type of CIS service (INFO, CMD, ..)</span>
+
+        <span class="c1"># set up CIS structures: request and info buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">=</span><span class="n">Cishdr</span><span class="p">()</span>    <span class="c1"># cis header in receive / info buffer</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">receive_buffer</span> <span class="o">=</span> <span class="n">Abuf</span><span class="p">(</span><span class="n">rcvsize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">receive_length</span> <span class="o">=</span> <span class="n">rcvsize</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">receive_buffer</span>
+
+        <span class="k">if</span> <span class="n">cis</span> <span class="o">==</span> <span class="s1">&#39;INFO&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">=</span><span class="n">Infreq</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                                 <span class="c1"># reset search fields</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">block_length</span><span class="o">=</span><span class="n">rcvsize</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dmlen</span>  <span class="c1"># size of usable info buffer</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">buffer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">dmlen</span>
+
+        <span class="k">elif</span> <span class="n">cis</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;CMD&#39;</span><span class="p">,</span> <span class="s1">&#39;PARTICIPANT-SHUTDOWN&#39;</span><span class="p">,</span> <span class="s1">&#39;SECURITY-CMD&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">=</span><span class="n">Cisreq</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="n">cis_version</span><span class="p">)</span>        <span class="c1"># reset optional fields</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send_buffer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">buffer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">dmlen</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Unsupported request&#39;</span><span class="p">,</span> <span class="n">cis</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Terminating&#39;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    <span class="c1"># context manager</span>
+        <span class="k">global</span> <span class="n">cis_version</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
+
+        <span class="n">kernel_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">kernelVersion</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Kernel </span><span class="si">%s</span><span class="s1"> </span><span class="se">\n</span><span class="s1">    with kernelsecurity=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">kernel_version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">kernelsecurity</span><span class="p">))</span>
+
+        <span class="c1"># extract major version number: &quot;Version 9.12.0.1&quot;</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">kernel_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># maxsplit=1 in PY3</span>
+        <span class="n">major</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">v2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>            <span class="c1"># maxsplit=1 in PY3</span>
+
+        <span class="n">kv</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">major</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">kv</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">cis_version</span> <span class="o">=</span> <span class="mi">8</span>
+
+        <span class="c1"># bb.kernelsecurity=KERNEL_SECURITY_NO this is set by kernelVersion()</span>
+        <span class="c1"># when using ACI level 8 or higher</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">logon</span><span class="p">()</span>      <span class="c1"># L O G O N</span>
+
+        <span class="c1"># print(&#39;Kernel Version=%s&#39; % bb.kernelVersion())</span>
+        <span class="c1"># print(&#39;server_class=%s\nserver_name=%s\nservice=%s&#39;% \</span>
+        <span class="c1">#    (self.bb.server_class, self.bb.server_name, self.bb.service))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Started CIS Session with Broker </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">broker_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>    <span class="c1"># context manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Logged off from CIS Session with Broker&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">icmd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">puid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">seqno</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">server</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">uowid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; send command request to Broker</span>
+
+<span class="sd">        Example: Perform CIS Command</span>
+<span class="sd">        &gt;&gt; with Cis(cis=&#39;CMD&#39;,broker=&#39;da3f:3800&#39;,user=&#39;MM&#39;) as cis:</span>
+<span class="sd">        &gt;&gt;     ibr = cis.icmd(?)</span>
+<span class="sd">        &gt;&gt;     ibr.dprint()</span>
+<span class="sd">        &gt;&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">object_type</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+            <span class="n">option</span><span class="o">=</span><span class="n">option</span><span class="p">,</span>
+            <span class="n">conv_id</span><span class="o">=</span><span class="n">conv_id</span><span class="p">,</span>             <span class="c1"># selection</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="n">server_class</span><span class="p">,</span>   <span class="c1"># selection</span>
+            <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>               <span class="c1"># selection</span>
+            <span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span>             <span class="c1"># selection</span>
+            <span class="n">puid</span><span class="o">=</span><span class="n">puid</span><span class="p">,</span>                   <span class="c1"># selection</span>
+            <span class="n">seqno</span><span class="o">=</span><span class="n">seqno</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>                 <span class="c1"># selection</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>                     <span class="c1"># selection</span>
+            <span class="n">uowid</span><span class="o">=</span><span class="n">uowid</span><span class="p">,</span>                 <span class="c1"># selection</span>
+            <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;NONE&#39;</span>  <span class="c1"># required</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="s1">&#39;YES&#39;</span>      <span class="c1"># 0s -&gt; 00200031</span>
+            <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">CIC_SET_SINGLE_CONVERSATION</span><span class="p">:</span>
+                <span class="c1"># needed for other commands that operate on objects of calling user ?</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">token</span><span class="o">=</span><span class="n">token</span>     <span class="c1"># also set it in etbcb</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">&amp;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after cmd execution call to </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">server_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">service</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">&amp;</span><span class="mi">8</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">req</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Error during processing CIS command&#39;</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span>
+                <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Broker Command Service Error </span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                               <span class="n">ec</span><span class="p">,</span> <span class="n">bcs_error</span><span class="p">(</span><span class="n">ec</span><span class="p">)),</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">iget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itype</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">puid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; function to get one info object</span>
+<span class="sd">        Example: get and print general BROKER information</span>
+<span class="sd">        &gt;&gt; with Cis(broker=&#39;da3f:3800&#39;,user=&#39;MM&#39;) as cis:</span>
+<span class="sd">        &gt;&gt;     ibr = cis.iget(CIO_BROKER)</span>
+<span class="sd">        &gt;&gt;     ibr.dprint()</span>
+<span class="sd">        &gt;&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">cis_version</span>
+
+        <span class="k">if</span> <span class="n">cis_version</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="k">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="k">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+
+        <span class="c1"># info objects returning only one item - suitable for iget()</span>
+        <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">CIO_BROKER</span><span class="p">:</span> <span class="n">Info_broker</span><span class="p">,</span>
+            <span class="n">CIO_UOW_STATISTICS</span><span class="p">:</span> <span class="n">Info_UOW_statistics</span><span class="p">}</span>      <span class="c1"># currently limited</span>
+
+        <span class="n">Infoclass</span> <span class="o">=</span> <span class="n">infos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">itype</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">Infoclass</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">object_type</span> <span class="o">=</span> <span class="n">itype</span>     <span class="c1"># set object type in request</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">Infoclass</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Invalid CIS object for ireader() type </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cio_str</span><span class="p">(</span><span class="n">itype</span><span class="p">),</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">version</span><span class="o">=</span><span class="mi">9</span> <span class="k">if</span> <span class="n">itype</span> <span class="o">==</span> <span class="n">CIO_UOW_STATISTICS</span> <span class="k">else</span> <span class="n">cis_version</span><span class="p">,</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="n">server_class</span><span class="p">,</span>   <span class="c1"># selection</span>
+            <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>               <span class="c1"># selection</span>
+            <span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span>             <span class="c1"># selection</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>                     <span class="c1"># selection</span>
+            <span class="n">puid</span><span class="o">=</span><span class="n">puid</span><span class="p">,</span>                   <span class="c1"># selection</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>                 <span class="c1"># selection</span>
+            <span class="n">conv_id</span><span class="o">=</span><span class="n">conv_id</span><span class="p">,</span>             <span class="c1"># selection</span>
+            <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;NEW&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="s1">&#39;YES&#39;</span>      <span class="c1"># 0s -&gt; 00200031</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">&amp;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after first call&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">infreq</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span>
+                <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Broker Information Service Error </span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                               <span class="n">ec</span><span class="p">,</span> <span class="n">bis_error</span><span class="p">(</span><span class="n">ec</span><span class="p">)),</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># self.cishdr.error_code == 0</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Nothing returned from Broker CIS&#39;</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span>
+
+                <span class="n">offset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dmlen</span>       <span class="c1"># first info after cishdr</span>
+
+                <span class="n">info</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">receive_buffer</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="n">info</span><span class="o">.</span><span class="n">dmlen</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">endConversation</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">info</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>   <span class="c1"># return any error</span>
+
+
+
+    <span class="k">def</span> <span class="nf">iread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">itype</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">puid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">uowid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">uowstatus</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">userstatus</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">recvuid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">recvtoken</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">recvclass</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">recvserver</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">recvservice</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">topic</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">publicationid</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">conv_type</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">subscriptiontype</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; generator returning info objects from class</span>
+<span class="sd">        Example: read and print information on all services of REPTOR server_class</span>
+<span class="sd">        &gt;&gt; cis=Cis(broker=&#39;da3f:3800&#39;,user=&#39;MM&#39;)</span>
+<span class="sd">        &gt;&gt; for iob in cis.iread(CIO_SERVICE,server_class=&#39;REPTOR&#39;):</span>
+<span class="sd">        &gt;&gt;     iob.dprint()</span>
+<span class="sd">        &gt;&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">cis_version</span>
+
+        <span class="k">if</span> <span class="n">cis_version</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="k">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
+                <span class="n">Info_client</span><span class="p">,</span> <span class="n">Info_server</span><span class="p">,</span> <span class="n">Info_psf</span><span class="p">,</span> <span class="n">Info_service</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="k">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
+                <span class="n">Info_client</span><span class="p">,</span> <span class="n">Info_server</span><span class="p">,</span> <span class="n">Info_psf</span><span class="p">,</span> <span class="n">Info_service</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+
+        <span class="n">ii</span> <span class="o">=</span> <span class="n">Broker</span><span class="p">()</span>   <span class="c1"># establish unique conversation for read sequence</span>
+        <span class="c1"># copy properties from own Cis object</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">trace</span>        <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">trace</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">broker_id</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">broker_id</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">user_id</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">user_id</span>
+
+        <span class="c1"># set CIS fixed service names</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">server_class</span> <span class="o">=</span> <span class="s1">&#39;SAG&#39;</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">server_name</span>  <span class="o">=</span> <span class="s1">&#39;ETBCIS&#39;</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">service</span>      <span class="o">=</span> <span class="s1">&#39;INFO&#39;</span>          <span class="c1"># Full information on all clients/servers/conversations</span>
+
+        <span class="n">cishdr</span><span class="o">=</span><span class="n">Cishdr</span><span class="p">()</span>    <span class="c1"># cis header in receive / info buffer</span>
+
+        <span class="n">infreq</span><span class="o">=</span><span class="n">Infreq</span><span class="p">()</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="n">infreq</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">block_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rcvsize</span><span class="o">-</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dmlen</span>  <span class="c1"># size of usable info buffer</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">version</span><span class="o">=</span><span class="n">cis_version</span>                     <span class="c1"># interface level 8</span>
+        <span class="c1"># init alpha selection fields from call parameters</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">uid</span><span class="o">=</span><span class="n">uid</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">puid</span><span class="o">=</span><span class="n">puid</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">token</span><span class="o">=</span><span class="n">token</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">server_class</span><span class="o">=</span><span class="n">server_class</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">server</span><span class="o">=</span><span class="n">server</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">service</span><span class="o">=</span><span class="n">service</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="n">conv_id</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">uowid</span><span class="o">=</span><span class="n">uowid</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">userstatus</span><span class="o">=</span><span class="n">userstatus</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">recvuid</span><span class="o">=</span><span class="n">recvuid</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">recvtoken</span><span class="o">=</span><span class="n">recvtoken</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">recvserver</span><span class="o">=</span><span class="n">recvserver</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">recvservice</span><span class="o">=</span><span class="n">recvservice</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">recvclass</span><span class="o">=</span><span class="n">recvclass</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">publicationid</span><span class="o">=</span><span class="n">publicationid</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">subscriptiontype</span><span class="o">=</span><span class="n">subscriptiontype</span>
+        <span class="n">infreq</span><span class="o">.</span><span class="n">conv_type</span><span class="o">=</span><span class="n">conv_type</span>
+
+        <span class="n">ii</span><span class="o">.</span><span class="n">receive_buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rcvsize</span><span class="p">)</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">receive_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rcvsize</span>
+
+        <span class="n">cishdr</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">ii</span><span class="o">.</span><span class="n">receive_buffer</span>
+
+        <span class="n">ii</span><span class="o">.</span><span class="n">send_buffer</span><span class="o">=</span><span class="n">infreq</span><span class="o">.</span><span class="n">buffer</span>
+        <span class="n">ii</span><span class="o">.</span><span class="n">send_length</span><span class="o">=</span><span class="n">infreq</span><span class="o">.</span><span class="n">dmlen</span>
+
+        <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">CIO_CLIENT</span><span class="p">:</span> <span class="n">Info_client</span><span class="p">,</span> <span class="n">CIO_SERVER</span><span class="p">:</span> <span class="n">Info_server</span><span class="p">,</span>
+                <span class="n">CIO_CONVERSATION</span><span class="p">:</span> <span class="n">Info_conversation</span><span class="p">,</span> <span class="n">CIO_PSF</span><span class="p">:</span> <span class="n">Info_psf</span><span class="p">,</span>
+                <span class="n">CIO_SERVICE</span><span class="p">:</span> <span class="n">Info_service</span><span class="p">,</span> <span class="n">CIO_UOW_STATISTICS</span><span class="p">:</span> <span class="n">Info_UOW_statistics</span> <span class="p">}</span>
+
+        <span class="n">Infoclass</span> <span class="o">=</span> <span class="n">infos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">itype</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">Infoclass</span><span class="p">:</span>
+            <span class="n">infreq</span><span class="o">.</span><span class="n">object_type</span> <span class="o">=</span> <span class="n">itype</span>     <span class="c1"># set object type in request</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">Infoclass</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="s1">&#39;Invalid CIS object for ireader() type </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cio_str</span><span class="p">(</span><span class="n">itype</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ii</span><span class="o">.</span><span class="n">conv_id</span><span class="o">=</span><span class="s1">&#39;NEW&#39;</span>
+            <span class="n">ii</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="s1">&#39;YES&#39;</span>      <span class="c1"># 0s -&gt; 00200031</span>
+            <span class="n">ii</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">&amp;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after first call&#39;</span><span class="p">)</span>
+                <span class="n">infreq</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span> <span class="c1"># 4 nothing found</span>
+                <span class="n">ec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">etb_error_code</span>
+                <span class="n">et</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">etb_error_text</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ec</span> <span class="o">==</span> <span class="s1">&#39;00000000&#39;</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Broker Information Service ETB Error </span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="se">\n</span><span class="s1">No objects returned&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                               <span class="n">ec</span><span class="p">,</span> <span class="n">et</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># print any other error</span>
+                <span class="n">ec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cishdr</span><span class="o">.</span><span class="n">error_code</span>
+                <span class="k">raise</span> <span class="n">CISError</span><span class="p">(</span><span class="s1">&#39;Broker Information Service Error </span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                               <span class="n">ec</span><span class="p">,</span> <span class="n">bis_error</span><span class="p">(</span><span class="n">ec</span><span class="p">)),</span> <span class="bp">self</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+            <span class="n">remaining</span> <span class="o">=</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span>
+
+            <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">offset</span><span class="o">=</span><span class="n">cishdr</span><span class="o">.</span><span class="n">dmlen</span>       <span class="c1"># first info after cishdr</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cishdr</span><span class="o">.</span><span class="n">curobj</span><span class="p">):</span>
+                    <span class="c1"># print(&#39;returning %d. object in current&#39; % (i)</span>
+                    <span class="c1"># info.dprint()</span>
+                    <span class="n">info</span><span class="o">.</span><span class="n">buffer</span><span class="o">=</span><span class="n">Abuf</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">dmlen</span><span class="p">)</span>
+                    <span class="n">info</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="n">ii</span><span class="o">.</span><span class="n">receive_buffer</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span><span class="o">+</span><span class="n">info</span><span class="o">.</span><span class="n">dmlen</span><span class="p">]</span>
+
+                    <span class="k">yield</span> <span class="n">info</span>
+                    <span class="n">offset</span> <span class="o">+=</span> <span class="n">info</span><span class="o">.</span><span class="n">dmlen</span>  <span class="c1"># next offset in receive buffer</span>
+
+                <span class="n">remaining</span> <span class="o">-=</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">curobj</span>
+
+                <span class="k">if</span> <span class="n">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ii</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">&amp;</span> <span class="mi">8</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after next call&#39;</span><span class="p">)</span>
+                        <span class="n">infreq</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                        <span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span>   <span class="c1"># return with StopIteration or any other error</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">.</span><span class="n">endConversation</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="kn">import</span> <span class="nn">getopt</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
+
+    <span class="n">cmd</span><span class="o">=</span><span class="mi">0</span>       <span class="c1"># CIC_ command</span>
+    <span class="n">option</span><span class="o">=</span><span class="mi">0</span>    <span class="c1"># CIP_IMMED /CIP_QUIESCE   # CIP_ option</span>
+    <span class="n">obj</span><span class="o">=</span><span class="mi">0</span>       <span class="c1"># CIO_ object</span>
+    <span class="n">puid</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="n">pwd</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">brokerid</span> <span class="o">=</span> <span class="s1">&#39;da3f:3800&#39;</span>
+    <span class="n">btrace</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">bservice</span><span class="o">=</span><span class="n">bclass</span><span class="o">=</span><span class="n">bname</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="n">detail</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">maxinfo</span><span class="o">=</span><span class="mi">32768</span>
+    <span class="n">convid</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="n">seqno</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">uowid</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="n">token</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="n">iserv</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span>    <span class="c1"># CIS SERVICE</span>
+    <span class="n">buser</span><span class="o">=</span><span class="s1">&#39;cmdinfo.py&#39;</span>  <span class="c1"># for communication with broker</span>
+    <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;&#39;</span>   <span class="c1"># for getting information on broker clients</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">getopt</span><span class="o">.</span><span class="n">getopt</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+            <span class="s1">&#39;hb:c:di:k:m:n:o:p:q:P:s:St:T:u:v:w:&#39;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s1">&#39;help&#39;</span><span class="p">,</span><span class="s1">&#39;broker=&#39;</span><span class="p">,</span><span class="s1">&#39;btrace=&#39;</span><span class="p">,</span><span class="s1">&#39;class=&#39;</span><span class="p">,</span><span class="s1">&#39;convid=&#39;</span><span class="p">,</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span><span class="s1">&#39;infouid=&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;name=&#39;</span><span class="p">,</span><span class="s1">&#39;option=&#39;</span><span class="p">,</span><span class="s1">&#39;password=&#39;</span><span class="p">,</span><span class="s1">&#39;puid=&#39;</span><span class="p">,</span><span class="s1">&#39;purge=&#39;</span><span class="p">,</span><span class="s1">&#39;maxinfo=&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;seqno=&#39;</span><span class="p">,</span><span class="s1">&#39;service=&#39;</span><span class="p">,</span><span class="s1">&#39;shutdown&#39;</span><span class="p">,</span><span class="s1">&#39;shutserv&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;uowid=&#39;</span><span class="p">,</span><span class="s1">&#39;userid=&#39;</span><span class="p">,</span><span class="s1">&#39;token=&#39;</span><span class="p">,</span><span class="s1">&#39;trace=&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="n">getopt</span><span class="o">.</span><span class="n">GetoptError</span><span class="p">:</span>
+        <span class="n">usage</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">opt</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-h&#39;</span><span class="p">,</span> <span class="s1">&#39;--help&#39;</span><span class="p">):</span>
+            <span class="n">usage</span><span class="p">()</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="s1">&#39;--broker&#39;</span><span class="p">):</span>
+            <span class="n">brokerid</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--class&#39;</span><span class="p">):</span>
+            <span class="n">bclass</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-d&#39;</span><span class="p">,</span> <span class="s1">&#39;--detail&#39;</span><span class="p">):</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># detailed info with conversations and uows</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;--name&#39;</span><span class="p">):</span>
+            <span class="n">bname</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--option&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">):</span>
+                <span class="n">option</span><span class="o">=</span><span class="n">CIP_QUIESCE</span>
+            <span class="k">elif</span> <span class="n">arg</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">):</span>
+                <span class="n">option</span><span class="o">=</span><span class="n">CIP_IMMED</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-x&#39;</span><span class="p">,</span> <span class="s1">&#39;--password&#39;</span><span class="p">):</span>
+            <span class="n">pwd</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--puid&#39;</span><span class="p">):</span>
+            <span class="n">puid</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="s1">&#39;--purge&#39;</span><span class="p">):</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="n">CIC_PURGE</span>
+            <span class="n">uowid</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--maxinfo&#39;</span><span class="p">):</span>
+            <span class="n">maxout</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="s1">&#39;--seqno&#39;</span><span class="p">):</span>
+            <span class="n">seqno</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--service&#39;</span><span class="p">):</span>
+            <span class="n">sss</span><span class="o">=</span><span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>      <span class="c1"># --service class:server:service</span>
+            <span class="k">del</span> <span class="n">sss</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>             <span class="c1"># skip any extranous items</span>
+            <span class="n">bservice</span><span class="o">=</span><span class="n">sss</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sss</span><span class="p">:</span>
+                <span class="n">bname</span><span class="o">=</span><span class="n">sss</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">sss</span><span class="p">:</span>
+                    <span class="n">bclass</span><span class="o">=</span><span class="n">sss</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-S&#39;</span><span class="p">,</span> <span class="s1">&#39;--shutdown&#39;</span><span class="p">):</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="n">CIC_SHUTDOWN</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-T&#39;</span><span class="p">,</span> <span class="s1">&#39;--btrace&#39;</span><span class="p">):</span>
+            <span class="n">tlevel</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tlevel</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">tlevel</span><span class="o">=</span><span class="mi">8</span>
+            <span class="k">if</span> <span class="n">tlevel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">cmd</span><span class="o">=</span><span class="n">CIC_TRACE_ON</span>
+                <span class="n">option</span> <span class="o">=</span> <span class="n">CIP_TR_LEVEL1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">tlevel</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cmd</span><span class="o">=</span><span class="n">CIC_TRACE_OFF</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--infouid&#39;</span><span class="p">):</span>
+            <span class="n">buser</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-u&#39;</span><span class="p">,</span> <span class="s1">&#39;--userid&#39;</span><span class="p">):</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--convid&#39;</span><span class="p">):</span>
+            <span class="n">convid</span><span class="o">=</span><span class="n">arg</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-w&#39;</span><span class="p">,</span> <span class="s1">&#39;--uowid&#39;</span><span class="p">):</span>
+            <span class="n">uowid</span><span class="o">=</span><span class="n">arg</span>
+            <span class="n">detail</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="s1">&#39;--token&#39;</span><span class="p">):</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">arg</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--trace&#39;</span><span class="p">):</span>
+            <span class="n">btrace</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="mi">80</span><span class="o">*</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">CIC_SHUTDOWN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">convid</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_CONVERSATION</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command SHUTDOWN for CONVERSATION </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">convid</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">seqno</span> <span class="ow">or</span> <span class="n">puid</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_SERVER</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command SHUTDOWN for server seqno=</span><span class="si">%d</span><span class="s1">/puid=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">seqno</span><span class="p">,</span><span class="n">puid</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">bservice</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_SERVICE</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command SHUTDOWN for service </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">bclass</span><span class="p">,</span><span class="n">bname</span><span class="p">,</span><span class="n">bservice</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">uid</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_PARTICIPANT</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;PARTICIPANT-SHUTDOWN&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command SHUTDOWN for participant </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">uid</span><span class="p">,</span><span class="n">token</span><span class="p">,</span><span class="n">seqno</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command client only supports SHUTDOWN with CONVERSATIONID or SERVICE or participant userid or server seqno&#39;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">CIC_PURGE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">uowid</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_PSF</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command PURGE unit-of-work </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">uowid</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command PURGE needs UOWID&#39;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">CIC_TRACE_ON</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_BROKER</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command TRACE-ON </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tlevel</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="n">CIC_TRACE_OFF</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">CIO_BROKER</span>
+            <span class="n">iserv</span> <span class="o">=</span> <span class="s1">&#39;CMD&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Broker CIS command TRACE-OFF&#39;</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="n">cmd</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># all comands are processed here</span>
+        <span class="k">with</span> <span class="n">Cis</span><span class="p">(</span><span class="n">cis</span><span class="o">=</span><span class="n">iserv</span><span class="p">,</span><span class="n">broker</span><span class="o">=</span><span class="n">brokerid</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">buser</span><span class="p">,</span><span class="n">trace</span><span class="o">=</span><span class="n">btrace</span><span class="p">)</span> <span class="k">as</span> <span class="n">cis</span><span class="p">:</span>
+            <span class="n">ibr</span> <span class="o">=</span> <span class="n">cis</span><span class="o">.</span><span class="n">icmd</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="n">option</span><span class="p">,</span> <span class="n">uowid</span><span class="o">=</span><span class="n">uowid</span><span class="p">,</span><span class="n">conv_id</span><span class="o">=</span><span class="n">convid</span><span class="p">,</span><span class="n">seqno</span><span class="o">=</span><span class="n">seqno</span><span class="p">,</span>
+                <span class="n">server</span><span class="o">=</span><span class="n">bname</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="n">bservice</span><span class="p">,</span><span class="n">server_class</span><span class="o">=</span><span class="n">bclass</span><span class="p">,</span><span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span><span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span><span class="n">puid</span><span class="o">=</span><span class="n">puid</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">()</span>
+
+    <span class="c1"># else: (not a command)</span>
+    <span class="c1">#       use information services</span>
+
+    <span class="c1"># select fields for display of info structures</span>
+    <span class="n">BROKER_FIELDS</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;runtime&#39;</span><span class="p">,</span><span class="s1">&#39;maxmsgsize&#39;</span><span class="p">,</span><span class="s1">&#39;platformname&#39;</span><span class="p">,</span><span class="s1">&#39;product_version&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pstoretype&#39;</span><span class="p">,</span><span class="s1">&#39;pstore&#39;</span><span class="p">,</span><span class="s1">&#39;uwtime&#39;</span><span class="p">,</span><span class="s1">&#39;client_nonact&#39;</span><span class="p">,)</span>
+    <span class="n">SERVICE_FIELDS</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;service&#39;</span><span class="p">,</span><span class="s1">&#39;conv_nonact&#39;</span><span class="p">,</span><span class="s1">&#39;servers_act&#39;</span><span class="p">,</span><span class="s1">&#39;conv_act&#39;</span><span class="p">,</span><span class="s1">&#39;uwtime&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;totaluows&#39;</span><span class="p">,</span><span class="s1">&#39;store&#39;</span><span class="p">,</span><span class="s1">&#39;deferrred&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arf&#39;</span><span class="p">,</span><span class="s1">&#39;scm&#39;</span><span class="p">,</span><span class="s1">&#39;prefetch&#39;</span><span class="p">,</span><span class="s1">&#39;maxPostponeAttempts&#39;</span><span class="p">,</span><span class="s1">&#39;postponeDelay&#39;</span> <span class="p">)</span> <span class="c1"># 10</span>
+    <span class="n">CONV_FIELDS</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;conv_id&#39;</span><span class="p">,</span><span class="s1">&#39;service&#39;</span><span class="p">,</span><span class="s1">&#39;conv_nonact&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;serveruid&#39;</span><span class="p">,</span><span class="s1">&#39;servertoken&#39;</span><span class="p">,</span><span class="s1">&#39;clientuid&#39;</span><span class="p">,</span><span class="s1">&#39;clienttoken&#39;</span><span class="p">,</span><span class="s1">&#39;conv_nonact&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;last_active&#39;</span><span class="p">,</span><span class="s1">&#39;totaluows&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arf&#39;</span><span class="p">,</span><span class="s1">&#39;scm&#39;</span><span class="p">,</span><span class="s1">&#39;prefetch&#39;</span><span class="p">,</span><span class="s1">&#39;roaming&#39;</span><span class="p">)</span>    <span class="c1"># 10: prefetch / roaming ???</span>
+    <span class="n">PSF_FIELDS</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;uow_id&#39;</span><span class="p">,</span><span class="s1">&#39;uowstatus&#39;</span><span class="p">,</span><span class="s1">&#39;uwcreate_time&#39;</span><span class="p">,</span><span class="s1">&#39;uw_lifetime&#39;</span><span class="p">,</span><span class="s1">&#39;eoc&#39;</span><span class="p">,</span><span class="s1">&#39;deliveries&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;msgcnt&#39;</span><span class="p">,</span><span class="s1">&#39;msgsize&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arf&#39;</span><span class="p">,</span><span class="s1">&#39;scm&#39;</span><span class="p">,</span>    <span class="c1"># 10 line too long: &#39;maxPostponeAttempts&#39;,&#39;remainingPostponeAttempts&#39;,&#39;postponeDelay&#39;,&#39;back2accepted&#39;,</span>
+        <span class="s1">&#39;commit_time&#39;</span><span class="p">)</span>  <span class="c1"># 10  create_time = Pstore V5??</span>
+    <span class="n">CS_FIELDS</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;uid&#39;</span><span class="p">,</span><span class="s1">&#39;puid&#39;</span><span class="p">,</span><span class="s1">&#39;puidTrans&#39;</span><span class="p">,</span><span class="s1">&#39;token&#39;</span><span class="p">,</span><span class="s1">&#39;status&#39;</span><span class="p">,</span><span class="s1">&#39;waitconvid&#39;</span><span class="p">,</span><span class="s1">&#39;service&#39;</span><span class="p">,</span><span class="s1">&#39;conv_act&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;service_act&#39;</span><span class="p">,</span><span class="s1">&#39;last_active&#39;</span><span class="p">,</span><span class="s1">&#39;nonact&#39;</span><span class="p">,</span><span class="s1">&#39;waits_new&#39;</span><span class="p">,</span><span class="s1">&#39;waits_old&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;convs&#39;</span><span class="p">,</span><span class="s1">&#39;active_uow&#39;</span><span class="p">,</span><span class="s1">&#39;recv_option&#39;</span><span class="p">,</span><span class="s1">&#39;created&#39;</span><span class="p">,</span><span class="s1">&#39;seqno&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arf&#39;</span><span class="p">,</span><span class="s1">&#39;scm&#39;</span><span class="p">,</span><span class="s1">&#39;prefetch&#39;</span><span class="p">,</span><span class="s1">&#39;roaming&#39;</span><span class="p">)</span>    <span class="c1"># 10: prefetch / roaming ???</span>
+
+    <span class="n">svcs_client</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">conv_client</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+    <span class="n">uows_client</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">Cis</span><span class="p">(</span> <span class="n">broker</span><span class="o">=</span><span class="n">brokerid</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="n">buser</span><span class="p">,</span><span class="n">trace</span><span class="o">=</span><span class="n">btrace</span><span class="p">)</span> <span class="k">as</span> <span class="n">cis</span><span class="p">:</span>
+        <span class="n">ibr</span> <span class="o">=</span> <span class="n">cis</span><span class="o">.</span><span class="n">iget</span><span class="p">(</span><span class="n">CIO_BROKER</span><span class="p">)</span>
+        <span class="n">ibr</span><span class="o">.</span><span class="n">dprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">BROKER_FIELDS</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">sv</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">iread</span><span class="p">(</span><span class="n">CIO_SERVICE</span><span class="p">,</span> <span class="n">server_class</span><span class="o">=</span><span class="n">bclass</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">bname</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="n">bservice</span><span class="p">):</span>
+            <span class="c1"># Service selectors: puid or uid/token or uid or token</span>
+            <span class="c1">#                    class/server/service</span>
+            <span class="nb">print</span><span class="p">(</span><span class="mi">80</span><span class="o">*</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            <span class="n">sv</span><span class="o">.</span><span class="n">dprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">SERVICE_FIELDS</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">sr</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">iread</span><span class="p">(</span><span class="n">CIO_SERVER</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span> <span class="n">server_class</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span>
+                                <span class="n">service</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">service</span><span class="p">):</span>
+               <span class="c1"># possible selectors: puid or uid/token or uid or token</span>
+               <span class="c1">#                     class/server/service</span>
+               <span class="n">sr</span><span class="o">.</span><span class="n">dprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">CS_FIELDS</span><span class="p">)</span>
+
+            <span class="n">css</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+            <span class="n">uidtok</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+
+            <span class="k">if</span> <span class="n">detail</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">cv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                        <span class="c1"># Conversation selectors: puid or uid/token or uid or token</span>
+                        <span class="c1">#                        class/server/service or conv_id</span>
+                        <span class="n">cis</span><span class="o">.</span><span class="n">iread</span><span class="p">(</span><span class="n">CIO_CONVERSATION</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span>
+                            <span class="n">server_class</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">service</span><span class="p">)</span> <span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Conversation </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">cv</span><span class="o">.</span><span class="n">dprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">CONV_FIELDS</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">css</span><span class="p">:</span>
+                        <span class="n">css</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span><span class="n">cv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span><span class="n">cv</span><span class="o">.</span><span class="n">service</span><span class="p">)</span>
+                        <span class="n">uidtok</span> <span class="o">=</span> <span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">clientuid</span><span class="p">,</span><span class="n">cv</span><span class="o">.</span><span class="n">clienttoken</span><span class="p">)</span>
+                        <span class="n">svcs_client</span><span class="p">[</span><span class="n">uidtok</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>     <span class="c1"># note all services client uses</span>
+                    <span class="n">conv_client</span><span class="p">[</span><span class="n">uidtok</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>                <span class="c1"># count all conversations client has</span>
+                    <span class="n">uows_client</span><span class="p">[</span><span class="n">uidtok</span><span class="p">]</span> <span class="o">+=</span> <span class="n">cv</span><span class="o">.</span><span class="n">totaluows</span>     <span class="c1"># count all uows client has</span>
+
+                    <span class="k">if</span> <span class="n">cv</span><span class="o">.</span><span class="n">totaluows</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Persistent messages for conversation </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cv</span><span class="o">.</span><span class="n">conv_id</span><span class="p">)</span>
+                        <span class="n">header</span><span class="o">=</span><span class="mi">1</span>
+                        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">iread</span><span class="p">(</span><span class="n">CIO_PSF</span><span class="p">,</span> <span class="n">conv_id</span><span class="o">=</span><span class="n">cv</span><span class="o">.</span><span class="n">conv_id</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span>
+                                            <span class="n">server_class</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">service</span><span class="p">):</span>
+                            <span class="c1"># Persistent store selectors: puid or uid/token or uid or token or conv_id</span>
+                            <span class="c1">#          class/server/service or any combination</span>
+                            <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+                                <span class="n">ps</span><span class="o">.</span><span class="n">lprint</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">selectfields</span><span class="o">=</span><span class="n">PSF_FIELDS</span><span class="p">)</span>
+                                <span class="n">header</span><span class="o">=</span><span class="mi">0</span>
+                            <span class="n">ps</span><span class="o">.</span><span class="n">lprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">PSF_FIELDS</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">()</span> <span class="c1"># new line</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># no detail</span>
+                <span class="n">us</span> <span class="o">=</span> <span class="n">cis</span><span class="o">.</span><span class="n">iget</span><span class="p">(</span><span class="n">CIO_UOW_STATISTICS</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span>
+                             <span class="n">server_class</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">sv</span><span class="o">.</span><span class="n">service</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">us</span><span class="p">:</span>
+                    <span class="c1"># UOW Statistics</span>
+                    <span class="n">us</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No UOW statistics available for </span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="s1">/</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span>
+                        <span class="n">sv</span><span class="o">.</span><span class="n">server_class</span><span class="p">,</span><span class="n">sv</span><span class="o">.</span><span class="n">server</span><span class="p">,</span><span class="n">sv</span><span class="o">.</span><span class="n">service</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">uid</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="mi">80</span><span class="o">*</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Broker clients with USER ID starting with </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">uid</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ob</span> <span class="ow">in</span> <span class="n">cis</span><span class="o">.</span><span class="n">iread</span><span class="p">(</span><span class="n">CIO_CLIENT</span><span class="p">):</span>
+                <span class="c1"># Client selectors: uowid or uid/token or uid or token</span>
+                <span class="c1">#    server=sv.server,server_class=sv.server_class,service=sv.service)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ob</span><span class="o">.</span><span class="n">uid</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">uid</span><span class="p">):</span>   <span class="c1"># post selection</span>
+                    <span class="k">continue</span>
+
+                <span class="n">ob</span><span class="o">.</span><span class="n">dprint</span><span class="p">(</span><span class="n">selectfields</span><span class="o">=</span><span class="n">CS_FIELDS</span><span class="p">)</span>
+                <span class="n">uidtok</span><span class="o">=</span><span class="p">(</span><span class="n">ob</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span><span class="n">ob</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+                <span class="n">svs</span> <span class="o">=</span> <span class="n">svcs_client</span><span class="p">[</span><span class="n">uidtok</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">svs</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Client has total of </span><span class="si">%d</span><span class="s1"> CONVs and </span><span class="si">%d</span><span class="s1"> committed UOWs receivable with services&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                        <span class="n">conv_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uidtok</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+                        <span class="n">uows_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uidtok</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+                    <span class="k">for</span> <span class="n">sv</span> <span class="ow">in</span> <span class="n">svs</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">sv</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">()</span>
+
+        <span class="c1">#for i, ob in enumerate(</span>
+        <span class="c1">#        cis.iread(CIO_SERVER, uid=&#39;REPTOR-DA3F-----MM10007&#39;) ):</span>
+        <span class="c1">#    print(&#39;Server %d&#39;%(i+1)</span>
+        <span class="c1">#    ob.dprint()</span>
+
+
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;v.r.l&#39;</span>
+<span class="k">if</span> <span class="n">__version__</span> <span class="o">==</span> <span class="s1">&#39;v.r.l&#39;</span><span class="p">:</span>
+    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2018-07-19 19:42:39 +0200 (Do, 19 Jul 2018) $&#39;</span>
+    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 842 $&#39;</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;Dev &#39;</span> <span class="o">+</span>  <span class="n">_svnrev</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_svndate</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c1">#  Copyright 2004-ThisYear Software AG</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2004-2019, software AG
+      <span class="lastupdated">
+        Last updated on Dec 11, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

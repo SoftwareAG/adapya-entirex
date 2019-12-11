@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Package Reference &mdash; adapya-entirex 1.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/SAG2015.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Indices" href="indices.html" />
+    <link rel="prev" title="Scripts" href="scripts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> adapya-entirex
+          
+
+          
+            
+            <img src="_static/SAG2015.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-adapya.entirex.broker">broker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-adapya.entirex.cmdinfo">cmdinfo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">adapya-entirex</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Package Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="package-reference">
+<h1>Package Reference<a class="headerlink" href="#package-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-adapya.entirex.broker">
+<span id="broker"></span><h2>broker<a class="headerlink" href="#module-adapya.entirex.broker" title="Permalink to this headline">¶</a></h2>
+<p>broker.py is a Python interface to Webmethods EntireX Broker</p>
+<p>The module loads the EntireX Broker stub:</p>
+<ul class="simple">
+<li><p>broker.dll for 64-bit Python otherwise broker32.dll (on Windows)</p></li>
+<li><p>libbroker.so shared library (on Unix)</p></li>
+</ul>
+<p>broker.py defines the Broker class using the Advanced Communication
+interface (ACI) for communicating with the EntireX broker.</p>
+<dl class="class">
+<dt id="adapya.entirex.broker.Broker">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">Broker</code><span class="sig-paren">(</span><em class="sig-param">broker_id='localhost'</em>, <em class="sig-param">user_id='monty'</em>, <em class="sig-param">token=None</em>, <em class="sig-param">receive_length=2048</em>, <em class="sig-param">send_length=2048</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the essential Broker ACI functions using the Etbcb.
+For reference see EntireX Broker ACI Programming.</p>
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.backout">
+<code class="sig-name descname">backout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.backout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.backout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backout UOW but continue conversation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.commit">
+<code class="sig-name descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit UOW but continue conversation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.commitEndConversation">
+<code class="sig-name descname">commitEndConversation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.commitEndConversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.commitEndConversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit UOW and end conversation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.deregister">
+<code class="sig-name descname">deregister</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.deregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.deregister" title="Permalink to this definition">¶</a></dt>
+<dd><p>A server can deregister a service from EntireX Broker</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.endConversation">
+<code class="sig-name descname">endConversation</code><span class="sig-paren">(</span><em class="sig-param">option=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.endConversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.endConversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A client or server can terminate one or more conversations.
+This is the EOC function in ACI terms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.kernelVersion">
+<code class="sig-name descname">kernelVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.kernelVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.kernelVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine Broker kernel version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.logoff">
+<code class="sig-name descname">logoff</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.logoff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.logoff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminate communication with Broker kernel</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.logon">
+<code class="sig-name descname">logon</code><span class="sig-paren">(</span><em class="sig-param">password=None</em>, <em class="sig-param">newpassword=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.logon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.logon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establish communication with a Broker kernel</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.receive">
+<code class="sig-name descname">receive</code><span class="sig-paren">(</span><em class="sig-param">conv_id=''</em>, <em class="sig-param">option=0</em>, <em class="sig-param">wait=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.receive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used by clients to receive incoming messages and by servers
+to receive incoming requests</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.receiveNew">
+<code class="sig-name descname">receiveNew</code><span class="sig-paren">(</span><em class="sig-param">wait=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.receiveNew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.receiveNew" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive any message from new conversation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.register">
+<code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param">option=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used by servers to inform EntireX Broker that a
+service is available</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.send">
+<code class="sig-name descname">send</code><span class="sig-paren">(</span><em class="sig-param">conv_id=''</em>, <em class="sig-param">option=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used by clients to send requests and servers to send replies</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.syncpoint">
+<code class="sig-name descname">syncpoint</code><span class="sig-paren">(</span><em class="sig-param">option=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.syncpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.syncpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function allows to manage Units of Work (UOWs)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.undo">
+<code class="sig-name descname">undo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.undo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.undo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove messages that have been sent out but not received</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="adapya.entirex.broker.Broker.version">
+<code class="sig-name descname">version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Broker.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Broker.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the version of the EntireX Broker Stub</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="adapya.entirex.broker.BrokerError">
+<em class="property">exception </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">BrokerError</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">etb</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#BrokerError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.BrokerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of BrokerException for Broker Error Responses</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="adapya.entirex.broker.BrokerException">
+<em class="property">exception </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">BrokerException</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">etb</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#BrokerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.BrokerException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instance will have set the following values:</p>
+<p>self.value  is the EXX Broker response string</p>
+<dl class="simple">
+<dt>self.etb  is the Broker ACI call parameters that were used when</dt><dd><p>the error occurred</p>
+</dd>
+</dl>
+<p>Example on how to call it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">BrokerException</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">etb</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">BrokerException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">adalog</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;BrokerException&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+    <span class="n">dump</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">etb</span><span class="o">.</span><span class="n">error_buffer</span><span class="p">,</span><span class="n">log</span><span class="o">=</span><span class="n">adalog</span><span class="o">.</span><span class="n">warning</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="adapya.entirex.broker.BrokerTimeOut">
+<em class="property">exception </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">BrokerTimeOut</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">etb</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#BrokerTimeOut"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.BrokerTimeOut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of BrokerException for timeouts of requests to Broker</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="adapya.entirex.broker.Etbcb">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">Etbcb</code><span class="sig-paren">(</span><em class="sig-param">send_length=0</em>, <em class="sig-param">receive_length=0</em>, <em class="sig-param">use_api_version=7</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#Etbcb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.Etbcb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines Broker control block with its attributes and Broker call()</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="adapya.entirex.broker.InterfaceError">
+<em class="property">exception </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">InterfaceError</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">etb</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#InterfaceError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.InterfaceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of BrokerException for Broker Interface Errors</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="adapya.entirex.broker.ParmsBrokerService">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.broker.</code><code class="sig-name descname">ParmsBrokerService</code><span class="sig-paren">(</span><em class="sig-param">broker_id=''</em>, <em class="sig-param">user_id=''</em>, <em class="sig-param">server_class=''</em>, <em class="sig-param">server_name=''</em>, <em class="sig-param">service=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/broker.html#ParmsBrokerService"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.broker.ParmsBrokerService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines parameters for a Broker service</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-adapya.entirex.cmdinfo">
+<span id="cmdinfo"></span><h2>cmdinfo<a class="headerlink" href="#module-adapya.entirex.cmdinfo" title="Permalink to this headline">¶</a></h2>
+<p>cmdinfo.py interface to Webmethods EntireX Broker CIS Services
+and service explorer</p>
+<p>Only a selection of the available fields is shown (see _FIELDS)</p>
+<p>This covers the Broker API for Command and Information Services V9.7</p>
+<p>Usage: cmdinfo [options]</p>
+<p>Options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>-h, --help              display this help
+-b, --broker ..         id of broker ETBxxxxx or hostname:port
+
+-c, --class ..          Broker server class (selector)
+-d  --detail            info request detailed conversation/uows
+-n, --name ..           Broker server name (selector)
+-k, --token ..          Token
+-m, --maxinfo ..        Receive buffer length - default 32768
+-o, --option ..         Option: QUIESCE, IMMED (first char suffices)
+-p, --puid              Physical user id (selector)
+-q, --seqno &lt;int&gt;       Sequence number (selector)
+-s, --service ..        Broker service (selector)
+                          short: -s class/server/service
+-i, --infouid ..        user id for broker communication
+-u, --userid ..         user id for information on active clients (selector)
+-v, --convid ..         conversation id (selector)
+-w, --uowid ..          unit of work (selector)
+-x, --password ..       password
+-t, --trace ..          sum of trace flags
+                        1 - dump buffers before Broker call
+                        2 -              after call
+                        4 - print broker calls, short and data
+                        8 - detailed print of buffers
+
+CIS commands (default command: info)
+
+-S, --shutdown          needs parameters convid or service or seqno (for server)
+                         or userid/puid/token for client
+-P, --purge &lt;uowid&gt;     psf remove uow from persistent store
+-T, --btrace &lt;level&gt;    Broker trace on level 1-8, 0 switch off
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">1.</span> <span class="n">show</span> <span class="nb">all</span> <span class="n">services</span> <span class="k">for</span> <span class="n">broker</span> <span class="k">class</span> <span class="nc">REPTOR</span> <span class="ow">and</span> <span class="n">server</span> <span class="n">MMSERV</span>
+   <span class="ow">and</span> <span class="n">related</span> <span class="n">conversations</span><span class="p">,</span> <span class="n">units</span> <span class="n">of</span> <span class="n">work</span> <span class="ow">and</span> <span class="n">servers</span><span class="p">;</span>
+   <span class="n">show</span> <span class="n">clients</span> <span class="n">starting</span> <span class="k">with</span> <span class="n">userid</span> <span class="n">MM</span>
+   <span class="n">show</span> <span class="n">general</span> <span class="n">broker</span> <span class="n">information</span> <span class="n">first</span><span class="p">::</span>
+
+     <span class="o">&gt;</span> <span class="n">cmdinfo</span> <span class="o">-</span><span class="n">b</span> <span class="n">zos3</span><span class="p">:</span><span class="mi">3800</span> <span class="o">-</span><span class="n">u</span> <span class="n">MM</span> <span class="o">-</span><span class="n">s</span> <span class="n">REPTOR</span><span class="o">/</span><span class="n">MMSERV</span><span class="o">/*</span>
+
+<span class="mf">2.</span> <span class="n">shutdown</span> <span class="n">a</span> <span class="n">participant</span> <span class="n">identified</span> <span class="n">by</span> <span class="n">userid</span><span class="p">,</span> <span class="n">service</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="n">conversation</span><span class="p">::</span>
+
+     <span class="o">&gt;</span> <span class="n">cmdinfo</span> <span class="o">-</span><span class="n">b</span> <span class="n">zos3</span><span class="p">:</span><span class="mi">3800</span> <span class="o">-</span><span class="n">Su</span> <span class="n">OUT4_Reader</span>
+                            <span class="o">-</span><span class="n">Ss</span> <span class="n">REPTOR</span><span class="o">/</span><span class="n">MMSERV</span><span class="o">/</span><span class="n">OUT4</span>
+                            <span class="o">-</span><span class="n">Sv</span> <span class="mi">1290000000000105</span>
+</pre></div>
+</div>
+<dl class="exception">
+<dt id="adapya.entirex.cmdinfo.CISError">
+<em class="property">exception </em><code class="sig-prename descclassname">adapya.entirex.cmdinfo.</code><code class="sig-name descname">CISError</code><span class="sig-paren">(</span><em class="sig-param">value</em>, <em class="sig-param">epa</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#CISError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.CISError" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Example use:</dt><dd><dl class="simple">
+<dt>try:</dt><dd><p>info = cis.iget(…)</p>
+</dd>
+<dt>except CISError as e:</dt><dd><dl class="simple">
+<dt>if e.epa.cishdr.error_code == x:</dt><dd><p>print(‘</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>CIS error: %s on %s/%s/%s’ %(e.value,</dt><dd><p>sv.server_class,sv.server,sv.service))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="adapya.entirex.cmdinfo.Cishdr">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.cmdinfo.</code><code class="sig-name descname">Cishdr</code><span class="sig-paren">(</span><em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#Cishdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.Cishdr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="adapya.entirex.cmdinfo.Cisreq">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.cmdinfo.</code><code class="sig-name descname">Cisreq</code><span class="sig-paren">(</span><em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#Cisreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.Cisreq" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="adapya.entirex.cmdinfo.Cisreq.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">v=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#Cisreq.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.Cisreq.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset values of the CIS Request instance</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="adapya.entirex.cmdinfo.Infreq">
+<em class="property">class </em><code class="sig-prename descclassname">adapya.entirex.cmdinfo.</code><code class="sig-name descname">Infreq</code><span class="sig-paren">(</span><em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#Infreq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.Infreq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information request Structure Class</p>
+<dl class="method">
+<dt id="adapya.entirex.cmdinfo.Infreq.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">v=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/adapya/entirex/cmdinfo.html#Infreq.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#adapya.entirex.cmdinfo.Infreq.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset values of the Information Request instance</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="indices.html" class="btn btn-neutral float-right" title="Indices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="scripts.html" class="btn btn-neutral float-left" title="Scripts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2004-2019, software AG
+      <span class="lastupdated">
+        Last updated on Dec 11, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

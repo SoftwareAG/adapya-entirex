@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scripts &mdash; adapya-entirex 1.0.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/SAG2015.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Package Reference" href="modules.html" />
+    <link rel="prev" title="Installation" href="installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> adapya-entirex
+          
+
+          
+            
+            <img src="_static/SAG2015.ico" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cmdinfo-py-entirex-broker-cis-services">cmdinfo.py - EntireX Broker CIS Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Package Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">adapya-entirex</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Scripts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/scripts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scripts">
+<h1>Scripts<a class="headerlink" href="#scripts" title="Permalink to this headline">¶</a></h1>
+<p>There is one script in adapya-entirex that can be run on the command line.
+It accepts Unix style parameters. A help page is shown with the help option.</p>
+<div class="section" id="cmdinfo-py-entirex-broker-cis-services">
+<h2>cmdinfo.py - EntireX Broker CIS Services<a class="headerlink" href="#cmdinfo-py-entirex-broker-cis-services" title="Permalink to this headline">¶</a></h2>
+<p>The command line script cmdinfo.py is a client service explorer of the
+webMethods EntireX Broker CIS Services.</p>
+<p>Only a selection of the available fields is shown (see *_FIELDS)</p>
+<p>This covers the Broker API for Command and Information Services V9.7</p>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmdinfo</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="options">
+<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>-h, --help              display this help
+-b, --broker ..         id of broker ETBxxxxx or hostname:port
+
+-c, --class ..          Broker server class (selector)
+-d  --detail            info request detailed conversation/uows
+-n, --name ..           Broker server name (selector)
+-k, --token ..          Token
+-m, --maxinfo ..        Receive buffer length - default 32768
+-o, --option ..         Option: QUIESCE, IMMED (first char suffices)
+-p, --puid              Physical user id (selector)
+-q, --seqno &lt;int&gt;       Sequence number (selector)
+-s, --service ..        Broker service (selector)
+                          short: -s class/server/service
+-i, --infouid ..        user id for broker communication
+-u, --userid ..         user id for information on active clients (selector)
+-v, --convid ..         conversation id (selector)
+-w, --uowid ..          unit of work (selector)
+-x, --password ..       password
+-t, --trace ..          sum of trace flags
+                        1 - dump buffers before Broker call
+                        2 -              after call
+                        4 - print broker calls, short and data
+                        8 - detailed print of buffers
+
+CIS commands (default command: info)
+
+-S, --shutdown          needs parameters convid or service or seqno (for server)
+                         or userid/puid/token for client
+-P, --purge &lt;uowid&gt;     psf remove uow from persistent store
+-T, --btrace &lt;level&gt;    Broker trace on level 1-8, 0 switch off
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ol class="arabic">
+<li><p>show all services for broker class REPTOR and server MMSERV
+and related conversations, units of work and servers;
+show clients starting with userid MM
+show general broker information first:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cmdinfo</span> <span class="o">-</span><span class="n">b</span> <span class="n">zos3</span><span class="p">:</span><span class="mi">3800</span> <span class="o">-</span><span class="n">u</span> <span class="n">MM</span> <span class="o">-</span><span class="n">s</span> <span class="n">REPTOR</span><span class="o">/</span><span class="n">MMSERV</span><span class="o">/*</span>
+</pre></div>
+</div>
+</li>
+<li><p>shutdown a participant identified by userid / a service / a conversation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cmdinfo</span> <span class="o">-</span><span class="n">b</span> <span class="n">zos3</span><span class="p">:</span><span class="mi">3800</span> <span class="o">-</span><span class="n">Su</span> <span class="n">OUT4_Reader</span>
+                       <span class="o">-</span><span class="n">Ss</span> <span class="n">REPTOR</span><span class="o">/</span><span class="n">MMSERV</span><span class="o">/</span><span class="n">OUT4</span>
+                       <span class="o">-</span><span class="n">Sv</span> <span class="mi">1290000000000105</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="Package Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installing.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2004-2019, software AG
+      <span class="lastupdated">
+        Last updated on Dec 11, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
