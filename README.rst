@@ -1,8 +1,5 @@
-﻿`adapya-entirex`_ Persistent Messaging with webMethods EntireX Broker
-
-
-adapya-entirex
-==============
+adapya-entirex - Persistent Messaging with webMethods EntireX Broker
+====================================================================
 
 *adapya-entirex* is a services library for persistent messaging using the Advanced Communication Interface (ACI) with the
 EntireX Broker from Software AG.
