@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# requires Python V2.6 or higher
+# requires Python V2.7 or higher
 from __future__ import print_function          # PY3
 
 import os,sys
@@ -19,39 +19,38 @@ extra = {}
 #   extra['install_requires'] = ['uuid']
 
 install_requires = [
-    'adapya.base>=1.0.0',
+    'adapya.base>=1.0.5',
 ]
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
-setup(  name='adapya.entirex',
+setup(  name='adapya-entirex',
     version='1.0.1',
     author='mmueller',
     author_email='mm@softwareag.com',
-    description='adapya.entirex - Software AG webMethods EntireX Broker API for Python',
+    description='adapya-entirex - Persistent messaging with webMethods EntireX Broker',
     license='Apache License 2.0',
-    url='http://tech.forums.softwareag.com/viewforum.php?f=171&C=11',
+    url='https://github.com/SoftwareAG/adapya-entirex',
     classifiers = [
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: Apache Software License',
          'Intended Audience :: Developers',
-         'Intended Audience :: Devops',
          'Natural Language :: English',
          'Operating System :: Microsoft :: Windows',
          'Operating System :: POSIX :: AIX',
          'Operating System :: POSIX :: HP-UX',
          'Operating System :: POSIX :: SunOS/Solaris',
          'Operating System :: POSIX :: Linux',
-         'Operating System :: IBM :: z/OS',
          'Programming Language :: Python',
          'Programming Language :: Python :: 2.7',
          'Programming Language :: Python :: 3.5',
          'Programming Language :: Python :: 3.6',
          'Programming Language :: Python :: 3.7',
-         'Topic :: Database',
-         'Topic :: Devops',
+         'Programming Language :: Python :: 3.8',
+         'Programming Language :: Python :: 3.9',
+         'Topic :: Software Development',
          ],
-    keywords='softwareag webMethods EntireX Broker',
+    keywords='softwareag webMethods EntireX Broker messaging',
     long_description=README,
     zip_safe=False,
     scripts = ['adapya/entirex/cmdinfo.py',],

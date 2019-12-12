@@ -9,7 +9,7 @@ EntireX Broker from Software AG.
 
 EntireX is a component in the webMethods high-performance communication infrastructure.
 
-adapya-entirex is part of a set of Python packages including adapya.adabas
+adapya-entirex is part of a set of Python packages including adapya-adabas
 a client library for Adabas database access.
 
 *adapya-entirex* is a **pure** Python package: it does not require compilation
