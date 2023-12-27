@@ -68,16 +68,34 @@ class InterfaceError(BrokerException):
     "Subclass of BrokerException for Broker Interface Errors"
     pass
 
-if sys.platform.startswith('win'):
-    if ctypes.sizeof(c_char_p) == 8:
-        etblnk=ctypes.cdll.broker     # 64 bit broker DLL
-    else:
-        etblnk=ctypes.cdll.broker32   # 32 bit broker DLL
-elif sys.platform != 'zos':
+
+if sys.platform == 'zos': # or != ?
     # MVS load lib search order: STEPLIB, JOBLIB, LPA and Link List
     etblnk=ctypes.cdll.LoadLibrary('//BROKER2')
 else:
-    etblnk=ctypes.cdll.LoadLibrary('libbroker.so')
+    if sys.platform in ('win32','cli'): # CPython or IronPython
+        import ctypes.util
+        etbname = ctypes.util.find_library('broker') # get full path of broker.dll
+        print('broker=%r' % etbname)
+    else:
+        etbname = 'libbroker.so'
+
+    try:
+        etblnk=ctypes.cdll.LoadLibrary(etbname)
+    except OSError as e:
+        print('Running Python Version %s\n\ton platform %s, %d bit, byteorder=%s' % (
+             sys.version, sys.platform, sizeof(c_char_p)*8, sys.byteorder ))
+        print('"%s" could not be loaded: check that EntireX bin directory' %(etbname,))
+        print("Exception '%r' occured" % e.value)
+        raise
+if 0:
+    if sys.platform.startswith('win'):
+        if ctypes.sizeof(c_char_p) == 8:
+            etblnk=ctypes.cdll.broker     # 64 bit broker DLL
+        else:
+            etblnk=ctypes.cdll.broker32   # 32 bit broker DLL
+    else:
+        etblnk=ctypes.cdll.LoadLibrary('libbroker.so')
 
 etblnk.broker.argtypes = [c_char_p,c_char_p,c_char_p,c_char_p]
 
@@ -659,14 +677,14 @@ class ParmsBrokerService:
         self.service=service
 
 
-__version__ = '1.0.1'
-if __version__ == '1.0.1':
-    _svndate='$Date: 2018-06-19 18:08:34 +0200 (Tue, 19 Jun 2018) $'
-    _svnrev='$Rev: 839 $'
+__version__ = '1.3.0'
+if __version__ == '1.3.0':
+    _svndate='$Date: 2023-01-04 10:56:59 +0100 (Wed, 04 Jan 2023) $'
+    _svnrev='$Rev: 1050 $'
     __version__ = 'Dev ' +  _svnrev.strip('$') + \
                   ' '.join(_svndate.strip('$').split()[0:3])
 
-#  Copyright 2004-2019 Software AG
+#  Copyright 2004-2023 Software AG
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.

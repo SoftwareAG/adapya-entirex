@@ -13,7 +13,7 @@ A required package is adapya.base which will be also installed by pip.
 
 Or to install from a zip file (similarly for tar file)::
 
-  > pip install adapya-entirex-1.0.1.zip
+  > pip install adapya-entirex-1.3.0.zip
 
 
 .. note::

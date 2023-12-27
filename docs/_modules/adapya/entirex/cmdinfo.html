@@ -1,40 +1,43 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>adapya.entirex.cmdinfo &mdash; adapya-entirex 1.0.1 documentation</title>
+  <title>adapya.entirex.cmdinfo &mdash; adapya-entirex 1.3.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
 
   
   
     <link rel="shortcut icon" href="../../../_static/SAG2015.ico"/>
   
+
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -63,7 +66,7 @@
             
             
               <div class="version">
-                1.0.1
+                1.3.0
               </div>
             
           
@@ -80,6 +83,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -98,6 +102,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -132,11 +137,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -218,15 +225,15 @@
 <span class="sd">                                -Sv 1290000000000105</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
 
-<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="k">import</span> <span class="n">Abuf</span>
-<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="k">import</span> <span class="n">dump</span>
-<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="k">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="kn">import</span> <span class="n">Abuf</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="kn">import</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="kn">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> \
     <span class="n">Uint2</span><span class="p">,</span> <span class="n">Uint4</span><span class="p">,</span> <span class="n">Uint8</span><span class="p">,</span> <span class="n">T_HEX</span><span class="p">,</span> <span class="n">T_IN</span><span class="p">,</span> <span class="n">T_OUT</span><span class="p">,</span> <span class="n">T_INOUT</span><span class="p">,</span> <span class="n">T_NONE</span><span class="p">,</span> <span class="n">str_str</span>
-<span class="kn">from</span> <span class="nn">adapya.base.dtconv</span> <span class="k">import</span> <span class="n">intervalstr</span>
-<span class="kn">from</span> <span class="nn">adapya.entirex.broker</span> <span class="k">import</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">BrokerException</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">localtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dtconv</span> <span class="kn">import</span> <span class="n">intervalstr</span>
+<span class="kn">from</span> <span class="nn">adapya.entirex.broker</span> <span class="kn">import</span> <span class="n">Broker</span><span class="p">,</span> <span class="n">BrokerException</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">localtime</span><span class="p">,</span> <span class="n">strftime</span>
 
 <span class="n">cis_version</span><span class="o">=</span><span class="mi">10</span>
 <span class="c1"># try this Broker version where Info_* classes in etbcinf.py can be used</span>
@@ -244,10 +251,10 @@
 <span class="sd">                sv.server_class,sv.server,sv.service))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">epa</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">epa</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">epa</span> <span class="o">=</span> <span class="n">epa</span>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
 
@@ -420,7 +427,7 @@
 
 <span class="c1"># --- EntireX Broker Command Request Structure ------------------------</span>
 <div class="viewcode-block" id="Cisreq"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Cisreq">[docs]</a><span class="k">class</span> <span class="nc">Cisreq</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">fields</span><span class="o">=</span><span class="p">(</span>                        <span class="c1"># Available with CIS Interface version</span>
         <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">,</span>         <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">),</span> <span class="c1"># 1 Interface version</span>
         <span class="n">Uint2</span><span class="p">(</span><span class="s1">&#39;object_type&#39;</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">T_IN</span><span class="p">,</span> <span class="n">ppfunc</span><span class="o">=</span><span class="n">cio_str</span><span class="p">),</span> <span class="c1"># 1 Object type to which the command applies</span>
@@ -484,7 +491,7 @@
 <span class="c1"># with subsequent RECEIVE commands have this structure as the</span>
 <span class="c1"># first part of the buffer.</span>
 <div class="viewcode-block" id="Cishdr"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Cishdr">[docs]</a><span class="k">class</span> <span class="nc">Cishdr</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">fields</span><span class="o">=</span><span class="p">(</span>
         <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;error_code&#39;</span><span class="p">),</span>                <span class="c1"># 1 CIS return code (0 = OK)</span>
         <span class="n">Uint4</span><span class="p">(</span><span class="s1">&#39;totobj&#39;</span><span class="p">),</span>                    <span class="c1"># 1 Total number of objects returned in object list</span>
@@ -510,7 +517,7 @@
 <div class="viewcode-block" id="Infreq"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.cmdinfo.Infreq">[docs]</a><span class="k">class</span> <span class="nc">Infreq</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Information request Structure Class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">fields</span><span class="o">=</span><span class="p">(</span>                            <span class="c1"># Available with CIS Interface version</span>
                                             <span class="c1"># | Optional/Required</span>
                                             <span class="c1"># | |</span>
@@ -570,7 +577,7 @@
 
 
 <span class="k">class</span> <span class="nc">Cis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cis</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rcvsize</span><span class="o">=</span><span class="mi">32768</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cis</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span> <span class="n">broker</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rcvsize</span><span class="o">=</span><span class="mi">32768</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Command and Information service object</span>
 
 <span class="sd">            cis = default &#39;INFO&#39; - full information on all clients/servers/conversations</span>
@@ -628,7 +635,7 @@
             <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    <span class="c1"># context manager</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    <span class="c1"># context manager</span>
         <span class="k">global</span> <span class="n">cis_version</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
@@ -659,7 +666,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Started CIS Session with Broker </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">broker_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>    <span class="c1"># context manager</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>    <span class="c1"># context manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Logged off from CIS Session with Broker&#39;</span><span class="p">)</span>
 
@@ -732,9 +739,9 @@
         <span class="k">global</span> <span class="n">cis_version</span>
 
         <span class="k">if</span> <span class="n">cis_version</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="k">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="kn">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="k">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="kn">import</span> <span class="n">Info_broker</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
 
         <span class="c1"># info objects returning only one item - suitable for iget()</span>
         <span class="n">infos</span> <span class="o">=</span> <span class="p">{</span><span class="n">CIO_BROKER</span><span class="p">:</span> <span class="n">Info_broker</span><span class="p">,</span>
@@ -809,10 +816,10 @@
         <span class="k">global</span> <span class="n">cis_version</span>
 
         <span class="k">if</span> <span class="n">cis_version</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="k">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf</span> <span class="kn">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
                 <span class="n">Info_client</span><span class="p">,</span> <span class="n">Info_server</span><span class="p">,</span> <span class="n">Info_psf</span><span class="p">,</span> <span class="n">Info_service</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="k">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
+            <span class="kn">from</span> <span class="nn">adapya.entirex.etbcinf8</span> <span class="kn">import</span> <span class="n">Info_conversation</span><span class="p">,</span> \
                 <span class="n">Info_client</span><span class="p">,</span> <span class="n">Info_server</span><span class="p">,</span> <span class="n">Info_psf</span><span class="p">,</span> <span class="n">Info_service</span><span class="p">,</span> <span class="n">Info_UOW_statistics</span>
 
         <span class="n">ii</span> <span class="o">=</span> <span class="n">Broker</span><span class="p">()</span>   <span class="c1"># establish unique conversation for read sequence</span>
@@ -894,7 +901,8 @@
                                <span class="n">ec</span><span class="p">,</span> <span class="n">bis_error</span><span class="p">(</span><span class="n">ec</span><span class="p">)),</span> <span class="bp">self</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">StopIteration</span>
+                <span class="c1"># raise StopIteration</span>
+                <span class="k">return</span>
 
             <span class="n">remaining</span> <span class="o">=</span> <span class="n">cishdr</span><span class="o">.</span><span class="n">totobj</span>
 
@@ -919,7 +927,8 @@
                         <span class="n">infreq</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
                         <span class="n">cishdr</span><span class="o">.</span><span class="n">dprint</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">StopIteration</span>
+                    <span class="c1"># raise StopIteration</span>
+                    <span class="k">return</span>
 
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span>   <span class="c1"># return with StopIteration or any other error</span>
@@ -931,7 +940,7 @@
 
     <span class="kn">import</span> <span class="nn">getopt</span>
     <span class="kn">import</span> <span class="nn">sys</span>
-    <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
 
     <span class="n">cmd</span><span class="o">=</span><span class="mi">0</span>       <span class="c1"># CIC_ command</span>
     <span class="n">option</span><span class="o">=</span><span class="mi">0</span>    <span class="c1"># CIP_IMMED /CIP_QUIESCE   # CIP_ option</span>
@@ -1181,8 +1190,8 @@
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;v.r.l&#39;</span>
 <span class="k">if</span> <span class="n">__version__</span> <span class="o">==</span> <span class="s1">&#39;v.r.l&#39;</span><span class="p">:</span>
-    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2018-07-19 19:42:39 +0200 (Do, 19 Jul 2018) $&#39;</span>
-    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 842 $&#39;</span>
+    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2023-12-01 00:54:33 +0100 (Fri, 01 Dec 2023) $&#39;</span>
+    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 1072 $&#39;</span>
     <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;Dev &#39;</span> <span class="o">+</span>  <span class="n">_svnrev</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span> <span class="o">+</span> \
                   <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_svndate</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
 
@@ -1205,23 +1214,28 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2004-2019, software AG
+        &#169; Copyright 2004-2023, software AG.
       <span class="lastupdated">
-        Last updated on Dec 12, 2019.
+        Last updated on Dec 07, 2023.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1229,7 +1243,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

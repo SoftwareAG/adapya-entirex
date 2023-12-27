@@ -12,21 +12,29 @@
 #DIST_DIR=dist
 
 PYTHON=python
-SED=C:\BAT\UnxUtils\upd\sed
-THISYEAR=2019
+#SED=C:\BAT\UnxUtils\upd\sed
+MED=$(PYUSP)\massedit.py    # user's appdata sitepackage
+
+THISYEAR=2023
 SUBP=entirex        # subpackage
 PACK=adapya-$(SUBP) # adapya package
-MAKDIR=C:\temp\apy
+MAKDIR=$(USERPROFILE)\adas\temp\apy
+
 
 #EASY_INSTALL=env/bin/easy_install-$(VERSION)
 #PYTEST=env/bin/py.test-$(VERSION)
 #NOSE=env/bin/nosetests-$(VERSION
 APYURL=http://redsvngis.eur.ad.sag/ADA/adapy
-APYWC=C:\adas\adapy
-GITDIR=C:\adas\git
+APYWC=$(USERPROFILE)\adas\adapy
+GITDIR=$(USERPROFILE)\adas\git
 
-SVN="C:\Program Files\TortoiseSVN\bin\svn.exe"
-SVNVERSION="C:\Program Files\TortoiseSVN\bin\svnversion.exe"
+
+
+#SVN="C:\Program Files\TortoiseSVN\bin\svn.exe"
+#SVNVERSION="C:\Program Files\TortoiseSVN\bin\svnversion.exe"
+SVN="svn"
+SVNVERSION="svnversion"
+
 
 
 # VRL version.release.level (e.g. 1.2.3) must be set from outside
@@ -48,7 +56,7 @@ info:
 
 
 clean:
-    cd C:/temp/apy
+    cd $(MAKDIR)
     -rd $(PACK)-$(VRL) /s /q
     del $(PACK)-$(VRL).*
 
@@ -64,8 +72,16 @@ release:
     $(SVN) export $(APYURL)/trunk/adapya/entirex $(PACK)-$(VRL)/adapya/entirex
     $(SVN) export $(APYURL)/trunk/adapya-entirex/doc/source $(PACK)-$(VRL)/adapya/entirex/doc
     cd $(PACK)-$(VRL)
-    $(SED) -i "s/v.r.l/$(VRL)/" setup.py adapya\entirex\*.py adapya\entirex\doc\*.py adapya\entirex\doc\*.rst
-    $(SED) -i "s/ThisYear/$(THISYEAR)/" adapya\entirex\*.py adapya\entirex\doc\*.py adapya\entirex\doc\*.rst
+    rem -- $(SED) -i "s/v.r.l/$(VRL)/" setup.py
+    python $(MED) -w -e "re.sub('v.r.l', '$(VRL)', line)" setup.py
+    python $(MED) -w -e "re.sub('v.r.l', '$(VRL)', line)" adapya\entirex\*.py
+    python $(MED) -w -e "re.sub('v.r.l', '$(VRL)', line)" adapya\entirex\doc\*.py
+    python $(MED) -w -e "re.sub('v.r.l', '$(VRL)', line)" adapya\entirex\doc\*.rst
+    rem -- $(SED) -i "s/ThisYear/$(THISYEAR)/"
+    python $(MED) -w -e "re.sub('ThisYear', '$(THISYEAR)', line)" adapya\entirex\*.py
+    python $(MED) -w -e "re.sub('ThisYear', '$(THISYEAR)', line)" adapya\entirex\doc\*.py
+    python $(MED) -w -e "re.sub('ThisYear', '$(THISYEAR)', line)" adapya\entirex\doc\*.rst
+
     rem --- delete  GIT directory mirror but leave hidden files (.git)
     del /A-H /q $(GITDIR)\$(PACK)\*.*
     rem del /S /q $(GITDIR)\$(PACK)\adapya\*.*
@@ -74,7 +90,7 @@ release:
     rem # pandoc --from=rst --to=gfm --output=README.md README.rst
     rem # cd $(MAKDIR)/$(PACK)-$(VRL)
     rem ---
-    $(PYTHON) setup.py sdist --formats=tar,zip
+    $(PYTHON) setup.py sdist --formats=gztar,zip
     cd ..
     xcopy $(PACK)-$(VRL)\dist\* ..\apy
 
@@ -86,7 +102,7 @@ tag:
 # XCOPY /D copies files only newer than target /S include subdir /Y no prompt
 
 upload:
-    cd C:/temp/apy
+    cd $(MAKDIR)
     xcopy /D /Y $(PACK)-$(VRL).* V:\tools\Python\adapya
     cd C:$(PACK)-$(VRL)/adapya/$(SUBP)
     xcopy /S /D /Y doc\_build V:\tools\Python\adapya\doc\$(SUBP)
@@ -96,7 +112,7 @@ upload:
 # copy .nojekyll file to docs dir: this will disable GIGHUB's own pages formatting
 
 docs:
-    cd C:/temp/apy/$(PACK)-$(VRL)/adapya/entirex
+    cd $(MAKDIR)/$(PACK)-$(VRL)/adapya/entirex
     sphinx-build -a doc/ doc/_build/
     xcopy /D $(APYWC)\trunk\*.nojekyll $(GITDIR)\$(PACK)\docs
     xcopy /D /s /y /q doc\_build\* $(GITDIR)\$(PACK)\docs

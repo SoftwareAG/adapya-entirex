@@ -2,7 +2,7 @@
 adapya-entirex - EntireX Broker Services
 ========================================
 
-**adapya-entirex 1.0.1**
+**adapya-entirex 1.3.0**
 
 .. toctree::
 

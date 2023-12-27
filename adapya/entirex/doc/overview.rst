@@ -15,6 +15,13 @@ of extensions.
 
 It has been used on Linux, Solaris and Windows.
 
+More adapya packages are available:
+
+- adapya-adabas: Native database API to Adabas
+- adapya-era: Client interface to Adabas Event Replication
+- adapya-base: prerequisite for adapya-entirex
+
+
 For more information about *EntireX* see
 
 -   Information of the `Software AG EntireX Product
@@ -30,7 +37,7 @@ For more information about *EntireX* see
 
 **Notes**
 
-1. Prerequisite for *adapya-entirex* is Python version 2.7 or 3.5 or higher
+1. Prerequisite for *adapya-entirex* is Python version 2.7 or 3.6 or higher
    and the adapya.base package.
 
 2. The **ctypes** module is required (usually included in Python
@@ -39,6 +46,12 @@ For more information about *EntireX* see
 
 Change History
 ==============
+
+
+**adapya-entirex 1.3.0 (Dec 2023)**
+
+-  IBM Open Enterprise SDK for Python
+
 
 **adapya-entirex 1.0.0 (May 2018)**
 
@@ -55,7 +68,7 @@ Change History
 adapya-entirex License
 ======================
 
-Copyright 2004-2019 Software AG
+Copyright 2004-2023 Software AG
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

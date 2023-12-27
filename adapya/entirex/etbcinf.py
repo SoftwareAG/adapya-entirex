@@ -392,15 +392,15 @@ class Info_UOW_statistics(Datamap):
         Datamap.__init__(self, 'UOW Statistics', *fields, **kw)
 
 
-__version__ = '1.0.1'
-if __version__ == '1.0.1':
+__version__ = '1.3.0'
+if __version__ == '1.3.0':
     _svndate='$Date: 2018-05-28 12:00:39 +0200 (Mon, 28 May 2018) $'
     _svnrev='$Rev: 826 $'
     __version__ = 'Dev ' +  _svnrev.strip('$') + \
                   ' '.join(_svndate.strip('$').split()[0:3])
 
 
-#  Copyright 2004-2019 Software AG
+#  Copyright 2004-2023 Software AG
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.

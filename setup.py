@@ -19,20 +19,20 @@ extra = {}
 #   extra['install_requires'] = ['uuid']
 
 install_requires = [
-    'adapya.base>=1.0.5',
+    'adapya.base>=1.3.0',
 ]
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
 setup(  name='adapya-entirex',
-    version='1.0.1',
+    version='1.3.0',
     author='mmueller',
     author_email='mm@softwareag.com',
     description='adapya-entirex - Persistent messaging with webMethods EntireX Broker',
     license='Apache License 2.0',
     url='https://github.com/SoftwareAG/adapya-entirex',
     classifiers = [
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: Apache Software License',
          'Intended Audience :: Developers',
          'Natural Language :: English',
@@ -43,11 +43,13 @@ setup(  name='adapya-entirex',
          'Operating System :: POSIX :: Linux',
          'Programming Language :: Python',
          'Programming Language :: Python :: 2.7',
-         'Programming Language :: Python :: 3.5',
          'Programming Language :: Python :: 3.6',
          'Programming Language :: Python :: 3.7',
          'Programming Language :: Python :: 3.8',
          'Programming Language :: Python :: 3.9',
+         'Programming Language :: Python :: 3.10',
+         'Programming Language :: Python :: 3.11',
+         'Programming Language :: Python :: 3.12',
          'Topic :: Software Development',
          ],
     keywords='softwareag webMethods EntireX Broker messaging',

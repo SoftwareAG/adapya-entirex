@@ -1,40 +1,43 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>adapya.entirex.broker &mdash; adapya-entirex 1.0.1 documentation</title>
+  <title>adapya.entirex.broker &mdash; adapya-entirex 1.3.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
 
   
   
     <link rel="shortcut icon" href="../../../_static/SAG2015.ico"/>
   
+
   
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -63,7 +66,7 @@
             
             
               <div class="version">
-                1.0.1
+                1.3.0
               </div>
             
           
@@ -80,6 +83,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -98,6 +102,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -132,11 +137,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -170,22 +177,22 @@
 <span class="sd">interface (ACI) for communicating with the EntireX broker.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>          <span class="c1"># PY3</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">acierror</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">acierror</span>
 <span class="c1"># from exceptions import Exception             # PY3</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="c1"># import string PY3</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
-<span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="n">c_char_p</span>
+<span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="n">c_char_p</span>
 
-<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="k">import</span> <span class="n">Abuf</span>
-<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="k">import</span> <span class="n">dump</span>
-<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="k">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> <span class="n">Uint4</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">adapya.base.defs</span> <span class="kn">import</span> <span class="n">Abuf</span>
+<span class="kn">from</span> <span class="nn">adapya.base.dump</span> <span class="kn">import</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">adapya.base.datamap</span> <span class="kn">import</span> <span class="n">Datamap</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Bytes</span><span class="p">,</span> <span class="n">Filler</span><span class="p">,</span> <span class="n">Uint1</span><span class="p">,</span> <span class="n">Uint4</span><span class="p">,</span> \
     <span class="n">T_IN</span><span class="p">,</span> <span class="n">T_OUT</span><span class="p">,</span> <span class="n">T_INOUT</span><span class="p">,</span> <span class="n">str_str</span>
 
 
@@ -208,12 +215,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">etb</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">etb</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">):</span>   <span class="c1"># indicator no explanation in acierror.py</span>
             <span class="n">value</span><span class="o">+=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Error-Text: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">etb</span><span class="o">.</span><span class="n">errtext_buffer</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">etb</span> <span class="o">=</span> <span class="n">etb</span>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BrokerError"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.BrokerError">[docs]</a><span class="k">class</span> <span class="nc">BrokerError</span><span class="p">(</span><span class="n">BrokerException</span><span class="p">):</span>
@@ -226,16 +233,34 @@
     <span class="s2">&quot;Subclass of BrokerException for Broker Interface Errors&quot;</span>
     <span class="k">pass</span></div>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">c_char_p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
-        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker</span>     <span class="c1"># 64 bit broker DLL</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker32</span>   <span class="c1"># 32 bit broker DLL</span>
-<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;zos&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;zos&#39;</span><span class="p">:</span> <span class="c1"># or != ?</span>
     <span class="c1"># MVS load lib search order: STEPLIB, JOBLIB, LPA and Link List</span>
     <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;//BROKER2&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;libbroker.so&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">,</span><span class="s1">&#39;cli&#39;</span><span class="p">):</span> <span class="c1"># CPython or IronPython</span>
+        <span class="kn">import</span> <span class="nn">ctypes.util</span>
+        <span class="n">etbname</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_library</span><span class="p">(</span><span class="s1">&#39;broker&#39;</span><span class="p">)</span> <span class="c1"># get full path of broker.dll</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;broker=</span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">etbname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">etbname</span> <span class="o">=</span> <span class="s1">&#39;libbroker.so&#39;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="n">etbname</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running Python Version </span><span class="si">%s</span><span class="se">\n\t</span><span class="s1">on platform </span><span class="si">%s</span><span class="s1">, </span><span class="si">%d</span><span class="s1"> bit, byteorder=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+             <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="p">,</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">c_char_p</span><span class="p">)</span><span class="o">*</span><span class="mi">8</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span> <span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">%s</span><span class="s1">&quot; could not be loaded: check that EntireX bin directory&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">etbname</span><span class="p">,))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exception &#39;</span><span class="si">%r</span><span class="s2">&#39; occured&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">raise</span>
+<span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">c_char_p</span><span class="p">)</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker</span>     <span class="c1"># 64 bit broker DLL</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">broker32</span>   <span class="c1"># 32 bit broker DLL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">etblnk</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">cdll</span><span class="o">.</span><span class="n">LoadLibrary</span><span class="p">(</span><span class="s1">&#39;libbroker.so&#39;</span><span class="p">)</span>
 
 <span class="n">etblnk</span><span class="o">.</span><span class="n">broker</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">,</span><span class="n">c_char_p</span><span class="p">]</span>
 
@@ -564,7 +589,7 @@
 
 <div class="viewcode-block" id="Etbcb"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.Etbcb">[docs]</a><span class="k">class</span> <span class="nc">Etbcb</span><span class="p">(</span><span class="n">Datamap</span><span class="p">):</span>
     <span class="s2">&quot;Defines Broker control block with its attributes and Broker call()&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">receive_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">receive_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">use_api_version</span><span class="o">=</span><span class="n">API_VERS7</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;errtext_buffer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Abuf</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
@@ -651,7 +676,7 @@
 <span class="sd">       For reference see EntireX Broker ACI Programming.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;monty&#39;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;monty&#39;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">receive_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">):</span>
         <span class="n">Etbcb</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">receive_length</span><span class="o">=</span><span class="n">receive_length</span><span class="p">,</span> <span class="n">send_length</span><span class="o">=</span><span class="n">send_length</span><span class="p">)</span>
 
@@ -808,7 +833,7 @@
 <div class="viewcode-block" id="ParmsBrokerService"><a class="viewcode-back" href="../../../modules.html#adapya.entirex.broker.ParmsBrokerService">[docs]</a><span class="k">class</span> <span class="nc">ParmsBrokerService</span><span class="p">:</span>
     <span class="s2">&quot;Defines parameters for a Broker service&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>\
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">broker_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">user_id</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>\
                  <span class="n">server_class</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">server_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">service</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">broker_id</span><span class="o">=</span><span class="n">broker_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span>
@@ -819,8 +844,8 @@
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;v.r.l&#39;</span>
 <span class="k">if</span> <span class="n">__version__</span> <span class="o">==</span> <span class="s1">&#39;v.r.l&#39;</span><span class="p">:</span>
-    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2018-06-19 18:08:34 +0200 (Di, 19 Jun 2018) $&#39;</span>
-    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 839 $&#39;</span>
+    <span class="n">_svndate</span><span class="o">=</span><span class="s1">&#39;$Date: 2023-01-04 10:56:59 +0100 (Wed, 04 Jan 2023) $&#39;</span>
+    <span class="n">_svnrev</span><span class="o">=</span><span class="s1">&#39;$Rev: 1050 $&#39;</span>
     <span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;Dev &#39;</span> <span class="o">+</span>  <span class="n">_svnrev</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span> <span class="o">+</span> \
                   <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_svndate</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
 
@@ -843,23 +868,28 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2004-2019, software AG
+        &#169; Copyright 2004-2023, software AG.
       <span class="lastupdated">
-        Last updated on Dec 12, 2019.
+        Last updated on Dec 07, 2023.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -867,7 +897,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

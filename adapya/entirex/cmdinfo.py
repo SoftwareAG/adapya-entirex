@@ -736,7 +736,8 @@ class Cis(object):
                                ec, bis_error(ec)), self)
 
             if cishdr.totobj == 0:
-                raise StopIteration
+                # raise StopIteration
+                return
 
             remaining = cishdr.totobj
 
@@ -761,7 +762,8 @@ class Cis(object):
                         infreq.dprint()
                         cishdr.dprint()
                 else:
-                    raise StopIteration
+                    # raise StopIteration
+                    return
 
         except:
             raise   # return with StopIteration or any other error
@@ -1021,14 +1023,14 @@ if __name__=='__main__':
 
 
 
-__version__ = '1.0.1'
-if __version__ == '1.0.1':
-    _svndate='$Date: 2018-07-19 19:42:39 +0200 (Thu, 19 Jul 2018) $'
-    _svnrev='$Rev: 842 $'
+__version__ = '1.3.0'
+if __version__ == '1.3.0':
+    _svndate='$Date: 2023-12-01 00:54:33 +0100 (Fri, 01 Dec 2023) $'
+    _svnrev='$Rev: 1072 $'
     __version__ = 'Dev ' +  _svnrev.strip('$') + \
                   ' '.join(_svndate.strip('$').split()[0:3])
 
-#  Copyright 2004-2019 Software AG
+#  Copyright 2004-2023 Software AG
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.

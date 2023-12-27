@@ -71,7 +71,7 @@ errdict = {
   '00010052': 'Library missing',
   '00010053': 'User ID missing',
   '00010054': 'Password missing',
-  '00010055': 'BCD o1.0.1ow',
+  '00010055': 'BCD o1.3.0ow',
   '00010056': 'BCD division by zero',
   '00010058': 'Invalid direction',
   '00010060': 'Response <reponse> from(Command/Info Service)',
@@ -89,7 +89,7 @@ errdict = {
   '00010075': 'No RPC protocol version received by INQUIRE Call',
   '00010076': 'Server does not support RPC protocol version needed for the request',
   '00010077': 'Broker API Version 2 needed',
-  '00010078': 'Parameter maximum length or array bounds o1.0.1ow.',
+  '00010078': 'Parameter maximum length or array bounds o1.3.0ow.',
   '00010079': 'Invalid unbounded array.',
   '00010080': 'No more unbounded arrays to free.',
   '00010081': 'Indices not correct.',
@@ -195,7 +195,7 @@ errdict = {
   '00200362': 'API: Broker Stub De-Initialized',
   '00200371': 'API: Cannot Specify arch w/o codepage',
   '00200372': 'API: Error converting locale to codepage',
-  '00200377': 'API: Character Conversion O1.0.1ow',
+  '00200377': 'API: Character Conversion O1.3.0ow',
   '00200379': 'API: Inconsistent Security Installation',
   '00200380': 'Some Characters Could not Be Converted',
   '00200400': 'Invalid SSL parameter specified.',
@@ -366,7 +366,7 @@ errdict = {
   '00790209': 'STUB: Nothing Returned From Broker',
   '00790214': 'STUB: Work Space Allocation Failed',
   '00790219': 'STUB: No TWA defined',
-  '00790225': 'SPFX Reply Buffer O1.0.1ow',
+  '00790225': 'SPFX Reply Buffer O1.3.0ow',
   '00790227': 'SPFX Unknown Binary field',
   '00790233': 'STUB: problem with SPFX total length',
   '00790234': 'Invalid binary field length',
@@ -376,7 +376,7 @@ errdict = {
   '02150128': 'Work queue full or alloc XWQE failed',
   '02150129': 'Not enough space in Communication buffer.',
   '02150148': 'EntireX Broker not active',
-  '02150151': 'Adabas command queue o1.0.1ow',
+  '02150151': 'Adabas command queue o1.3.0ow',
   '02150152': 'IUBL is too low',
   '02150254': 'NET: Connection Error',
   '02150255': 'NET: Connection Error',
@@ -436,7 +436,7 @@ errdict = {
   '02160099': 'XTS Message Rejected',
   '02160100': 'XTS Shutdown in process',
   '02160101': 'XTS Route Timeout',
-  '02160102': 'XTS Route Table o1.0.1ow',
+  '02160102': 'XTS Route Table o1.3.0ow',
   '02160103': 'XTS Route TTL expired',
   '02160104': 'XTS Route failed',
   '02160120': 'XTS SSL init failed',
@@ -499,7 +499,7 @@ errdict = {
   '02161020': 'TCP/IP Not a directory',
   '02161021': 'TCP/IP Is a directory',
   '02161022': 'TCP/IP Invalid argument',
-  '02161023': 'TCP/IP File table o1.0.1ow',
+  '02161023': 'TCP/IP File table o1.3.0ow',
   '02161024': 'TCP/IP Too many open sockets',
   '02161025': 'TCP/IP Not a typewriter',
   '02161026': 'TCP/IP Text file busy',
@@ -623,14 +623,14 @@ def geterror(errorcode):
         return ' %s : no explanation available' % errorcode
 
 
-__version__ = '1.0.1'
-if __version__ == '1.0.1':
+__version__ = '1.3.0'
+if __version__ == '1.3.0':
     _svndate='$Date: 2018-10-10 18:37:47 +0200 (Wed, 10 Oct 2018) $'
     _svnrev='$Rev: 876 $'
     __version__ = 'Dev ' +  _svnrev.strip('$') + \
                   ' '.join(_svndate.strip('$').split()[0:3])
 
-#  Copyright 2004-2019 Software AG
+#  Copyright 2004-2023 Software AG
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
